@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Game 1 — Founding & Early Republic</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+  <div class="wrap">
+
+    <div class="topbar">
+      <a class="btn secondary" href="../index.html">← Back to Hub</a>
+      <button id="resetBtn" class="secondary">Hard Reset</button>
+    </div>
+
+    <header class="hero">
+      <div class="kicker">Legend Mastery Series • American Studies Bellringer Set A</div>
+      <h1 id="gameTitle">Game</h1>
+      <p id="gameSub" class="sub"></p>
+
+      <div class="pills">
+        <span id="gameMeta" class="pill"></span>
+        <span class="pill">Auto-Submit</span>
+        <span class="pill">No Ticket Unless Perfect</span>
+      </div>
+    </header>
+
+    <main class="game-shell" style="margin-top: 20px;">
+
+      <section id="startPanel" class="start">
+        <h2>Name Entry Required</h2>
+        <p class="muted">
+          Enter your name, then complete all 9 questions. One miss means no ticket.
+          You must restart for a perfect run.
+        </p>
+
+        <input
+          id="studentName"
+          class="input"
+          placeholder="First and last name"
+          autocomplete="name"
+        />
+
+        <button id="startBtn">Start Game</button>
+      </section>
+
+      <section id="gamePanel" class="hide">
+        <div class="hud">
+          <div>
+            <span class="label">Progress</span>
+            <b id="progress">1 / 9</b>
+          </div>
+
+          <div>
+            <span class="label">Accuracy</span>
+            <b id="acc">100%</b>
+          </div>
+
+          <div>
+            <span class="label">Misses</span>
+            <b id="misses">0</b>
+          </div>
+
+          <div>
+            <span class="label">Timer</span>
+            <b id="timer">0:00</b>
+          </div>
+        </div>
+
+        <p id="csLine" class="muted small"></p>
+        <div id="qText" class="question"></div>
+        <div id="choices" class="choices"></div>
+        <div id="feedback" class="feedback"></div>
+      </section>
+
+      <section id="finishPanel" class="hide">
+        <h2 id="finishTitle"></h2>
+        <p id="finishMsg" class="muted"></p>
+
+        <div id="ticket"></div>
+
+        <div class="btn-row">
+          <button id="resetBtn2">Hard Reset / Try Again</button>
+          <a class="btn secondary" href="../index.html">Back to Hub</a>
+        </div>
+      </section>
+
+      <div id="errorBox" class="errorbox hide"></div>
+
+    </main>
+
+    <p class="footer small">
+      Correct answer required to advance • Hint on miss • Explanation shown after correct answer
+    </p>
+
+  </div>
+
+  <script>
+    /*
+      ============================================================
+      QUESTION BANK — EDIT HERE
+      ============================================================
+
+      To edit a question:
+      1. Change the question text.
+      2. Change any choice text.
+      3. Set answer to "A", "B", "C", or "D".
+      4. Keep each game at 9 questions.
+      5. Hints should guide students without revealing the answer.
+      6. Explanations appear after a correct answer and linger about 5 seconds.
+    */
+
+    const GAME = {
+  "title": "Game 1 — Founding & Early Republic",
+  "subtitle": "Historical Thinking, Declaration, Northwest Ordinance, Constitution, Bill of Rights",
+  "cs": "CS 1–7",
+  "key": "amstud_bellringer_set_a_game_1",
+  "questions": [
+    {
+      "id": "Q1",
+      "question": "Which factor BEST helps determine whether a historical source is credible?",
+      "choices": [
+        "The length of the document",
+        "The number of times it has been viewed",
+        "Agreement with other reliable sources",
+        "Whether the author uses emotional language"
+      ],
+      "answer": "C",
+      "explanation": "A source is credible when its information is supported by other trustworthy sources. Historians cross-check facts across multiple accounts to confirm accuracy and minimize the impact of bias. Agreement among reputable sources strengthens reliability and is a core practice in historical research.",
+      "cs": "CS 1",
+      "efl": "Analyze and evaluate source credibility",
+      "hint": "Credibility grows when a source can be checked against other reliable sources."
+    },
+    {
+      "id": "Q2",
+      "question": "A historian finds a newspaper article written during the Spanish-American War that strongly supports U.S. expansion. What should the historian do first?",
+      "choices": [
+        "Ignore it because it is biased",
+        "Compare it with other sources from the era",
+        "Use it as the only source",
+        "Reject all newspapers as unreliable"
+      ],
+      "answer": "B",
+      "explanation": "Even biased sources contain valuable information. Historians compare such sources with others from the same period to identify consistent facts. Corroboration allows them to understand context, detect exaggeration, and extract reliable details while accounting for perspective.",
+      "cs": "CS 1",
+      "efl": "Analyze and evaluate source credibility",
+      "hint": "Bias does not automatically make a source useless; historians compare it with other evidence."
+    },
+    {
+      "id": "Q3",
+      "question": "Which is an example of a primary source for studying World War I?",
+      "choices": [
+        "A documentary about the war",
+        "A modern textbook",
+        "A soldier’s letter from the trenches",
+        "A historian’s analysis from 2010"
+      ],
+      "answer": "C",
+      "explanation": "A letter written by a soldier during WWI is a firsthand account created at the time of the event. Primary sources provide direct evidence and allow historians to understand individuals’ experiences, perspectives, and emotions without later interpretation. WEDNESDAY (2 MCQs) Content: CS 4 — Declaration of Independence + OST Recall",
+      "cs": "CS 1",
+      "efl": "Distinguish primary and secondary evidence",
+      "hint": "Primary sources are created by people who experienced the event or lived at the time."
+    },
+    {
+      "id": "Q4",
+      "question": "Which democratic ideal in the Declaration explains why governments derive their power from the people?",
+      "choices": [
+        "Federalism",
+        "Consent of the governed",
+        "Rule of law",
+        "Judicial review"
+      ],
+      "answer": "B",
+      "explanation": "“Consent of the governed” reflects the Enlightenment idea that government authority comes from the people. This principle asserts that legitimacy is based on citizens granting power to leaders, a foundational idea expressed clearly in the Declaration of Independence.",
+      "cs": "CS 4",
+      "efl": "Explain unalienable rights and consent of the people",
+      "hint": "The question asks where government gets legitimate power."
+    },
+    {
+      "id": "Q5",
+      "question": "Why do historians corroborate evidence before drawing conclusions?",
+      "choices": [
+        "To shorten the research process",
+        "To ensure multiple sources support a claim",
+        "To avoid reading biased sources",
+        "To eliminate the need for secondary sources"
+      ],
+      "answer": "B",
+      "explanation": "Corroboration—checking multiple sources—is essential for determining accuracy. Since individual sources may contain bias or error, historians verify details across accounts. When several independent sources agree, the conclusion becomes more reliable. FRIDAY (1 MCQ) Content: CS 5 — Northwest Ordinance",
+      "cs": "CS 2",
+      "efl": "Use evidence to support or refute conclusions",
+      "hint": "Corroboration means checking whether several sources support the same claim."
+    },
+    {
+      "id": "Q6",
+      "question": "Which precedent established by the Northwest Ordinance was later included in the U.S. Constitution?",
+      "choices": [
+        "A national religion",
+        "Slavery permitted across all territories",
+        "Protection of civil liberties",
+        "Creation of political parties"
+      ],
+      "answer": "C",
+      "explanation": "The Northwest Ordinance guaranteed fundamental rights such as freedom of religion, property rights, and due process. These protections influenced the Bill of Rights, showing continuity between early territorial policies and the later constitutional framework.",
+      "cs": "CS 5",
+      "efl": "Explain Northwest Ordinance precedents",
+      "hint": "Look for a governing precedent later reflected in constitutional protections."
+    },
+    {
+      "id": "Q11",
+      "question": "Which weakness of the Articles did the new Constitution directly fix?",
+      "choices": [
+        "Lack of a national military",
+        "No power to regulate interstate commerce",
+        "States appointing Supreme Court justices",
+        "Too strong national executive"
+      ],
+      "answer": "B",
+      "explanation": "The Constitution granted Congress power over interstate commerce, solving trade conflicts that states had caused under the Articles. This authority allowed for uniform economic policy and reduced state-level competition that hurt national unity. FRIDAY (1 MCQ) Content: CS 7 — Constitutional Structure",
+      "cs": "CS 6",
+      "efl": "Explain how the Constitution strengthened national government",
+      "hint": "The Constitution fixed economic weakness by giving Congress power over commerce."
+    },
+    {
+      "id": "Q12",
+      "question": "Why did the Framers create three branches of government?",
+      "choices": [
+        "To reduce state influence",
+        "To ensure quick decision-making",
+        "To prevent any one branch from becoming too powerful",
+        "To give Congress control over the military"
+      ],
+      "answer": "C",
+      "explanation": "Separation of powers distributes authority among the legislative, executive, and judicial branches. By dividing responsibilities, the Framers reduced the risk of tyranny and ensured that each branch could check the others.",
+      "cs": "CS 6",
+      "efl": "Explain limited government and separation of powers",
+      "hint": "Three branches were created so power would not concentrate in one place."
+    },
+    {
+      "id": "Q13",
+      "question": "Why did Anti-Federalists oppose the original Constitution?",
+      "choices": [
+        "It created too many political parties",
+        "It lacked protections for individual rights",
+        "It guaranteed equal representation in Congress",
+        "It strengthened state governments too much"
+      ],
+      "answer": "B",
+      "explanation": "Anti-Federalists feared that a strong national government could abuse power without explicit rights protections. Their pressure led to the Bill of Rights, ensuring freedoms like speech, religion, and due process were formally guaranteed.",
+      "cs": "CS 7",
+      "efl": "Compare Federalist and Anti-Federalist arguments",
+      "hint": "Anti-Federalists worried about liberty and wanted explicit protections."
+    }
+  ]
+};
+
+    /*
+      ============================================================
+      GAME ENGINE — DO NOT EDIT UNLESS CHANGING GAME BEHAVIOR
+      ============================================================
+    */
+
+    const $ = (id) => document.getElementById(id);
+
+    let order = [];
+    let idx = 0;
+    let misses = 0;
+    let attempts = 0;
+    let startMs = null;
+    let timer = null;
+    let student = "";
+    let locked = false;
+
+    function showError(message) {
+      $("errorBox").classList.remove("hide");
+      $("errorBox").textContent = message;
+    }
+
+    window.addEventListener("error", (event) => {
+      showError("Game error: " + event.message);
+    });
+
+    window.addEventListener("unhandledrejection", (event) => {
+      const reason = event.reason?.message || event.reason;
+      showError("Game promise error: " + reason);
+    });
+
+    function pad(number) {
+      return String(number).padStart(2, "0");
+    }
+
+    function timeStr(date) {
+      return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    }
+
+    function elapsed() {
+      const seconds = Math.floor((Date.now() - startMs) / 1000);
+      return `${Math.floor(seconds / 60)}:${pad(seconds % 60)}`;
+    }
+
+    function accuracy() {
+      if (!attempts) return 100;
+      return Math.round(((attempts - misses) / attempts) * 100);
+    }
+
+    function hardReset() {
+      try {
+        sessionStorage.removeItem(GAME.key);
+        localStorage.removeItem(GAME.key);
+      } catch (error) {
+        console.warn("Storage clear skipped:", error);
+      }
+
+      location.reload();
+    }
+
+    function startGame() {
+      student = $("studentName").value.trim();
+
+      if (!student) {
+        showError("Enter your name to begin.");
+        return;
+      }
+
+      $("startPanel").classList.add("hide");
+      $("gamePanel").classList.remove("hide");
+
+      startMs = Date.now();
+      order = GAME.questions.map((_, index) => index);
+      idx = 0;
+      misses = 0;
+      attempts = 0;
+
+      timer = setInterval(updateHud, 500);
+
+      render();
+    }
+
+    function updateHud() {
+      $("progress").textContent = `${Math.min(idx + 1, GAME.questions.length)} / ${GAME.questions.length}`;
+      $("acc").textContent = accuracy() + "%";
+      $("misses").textContent = misses;
+      $("timer").textContent = startMs ? elapsed() : "0:00";
+    }
+
+    function render() {
+      locked = false;
+      updateHud();
+
+      const question = GAME.questions[order[idx]];
+
+      $("qText").textContent = question.question;
+      $("csLine").textContent = question.cs + " • " + question.efl;
+      $("feedback").innerHTML =
+        "Choose the best answer. Incorrect choices give a hint but do not reveal the answer.";
+
+      const choicesBox = $("choices");
+      choicesBox.innerHTML = "";
+
+      const letters = ["A", "B", "C", "D"];
+
+      question.choices.forEach((choiceText, index) => {
+        const button = document.createElement("button");
+        button.className = "choice";
+        button.innerHTML = `<b>${letters[index]}.</b> ${choiceText}`;
+        button.onclick = () => choose(index, button);
+        choicesBox.appendChild(button);
+      });
+    }
+
+    function choose(index, button) {
+      if (locked) return;
+
+      const question = GAME.questions[order[idx]];
+      const chosen = "ABCD"[index];
+
+      attempts++;
+
+      if (chosen === question.answer) {
+        locked = true;
+        button.classList.add("correct");
+
+        $("feedback").innerHTML = "<b>Correct.</b><br>" + question.explanation;
+
+        updateHud();
+
+        setTimeout(() => {
+          idx++;
+
+          if (idx >= GAME.questions.length) {
+            finish();
+          } else {
+            render();
+          }
+        }, 5000);
+
+      } else {
+        misses++;
+        button.classList.add("incorrect");
+        button.disabled = true;
+
+        $("feedback").innerHTML = "<b>Not yet.</b> Hint: " + question.hint;
+
+        updateHud();
+      }
+    }
+
+    function finish() {
+      clearInterval(timer);
+
+      $("gamePanel").classList.add("hide");
+      $("finishPanel").classList.remove("hide");
+
+      const end = new Date();
+      const perfectRun = misses === 0;
+
+      $("finishTitle").textContent = perfectRun
+        ? "Perfect Run — Submit Ticket"
+        : "Mastery required — restart";
+
+      $("finishMsg").textContent = perfectRun
+        ? "Show this ticket to your teacher."
+        : "No ticket generated. Restart and complete a perfect run.";
+
+      const ticket = $("ticket");
+      ticket.className = perfectRun ? "ticket" : "ticket danger";
+
+      if (perfectRun) {
+        ticket.innerHTML = `
+          <h2>Submit Ticket</h2>
+
+          <div class="ticket-grid">
+            <div>
+              <span class="label">Student</span>
+              <b>${student}</b>
+            </div>
+
+            <div>
+              <span class="label">Date</span>
+              <b>${end.toLocaleDateString()}</b>
+            </div>
+
+            <div>
+              <span class="label">Start Time</span>
+              <b>${timeStr(new Date(startMs))}</b>
+            </div>
+
+            <div>
+              <span class="label">End Time</span>
+              <b>${timeStr(end)}</b>
+            </div>
+
+            <div>
+              <span class="label">Runtime</span>
+              <b>${elapsed()}</b>
+            </div>
+
+            <div>
+              <span class="label">Accuracy</span>
+              <b>${accuracy()}%</b>
+            </div>
+
+            <div>
+              <span class="label">Misses</span>
+              <b>${misses}</b>
+            </div>
+
+            <div>
+              <span class="label">Result</span>
+              <b>Perfect Run</b>
+            </div>
+          </div>
+        `;
+      } else {
+        ticket.innerHTML = `
+          <h2>Mastery required — restart</h2>
+          <p>You must finish with 0 misses to generate a submit ticket.</p>
+        `;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      $("gameTitle").textContent = GAME.title;
+      $("gameSub").textContent = GAME.subtitle;
+      $("gameMeta").textContent = GAME.cs + " • 9 Questions • Perfect Run Required";
+
+      $("startBtn").onclick = startGame;
+      $("resetBtn").onclick = hardReset;
+      $("resetBtn2").onclick = hardReset;
+    });
+  </script>
+</body>
+</html>
