@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Game 4 — Industrialization & Progressive Era</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+  <div class="wrap">
+
+    <div class="topbar">
+      <a class="btn secondary" href="../index.html">← Back to Hub</a>
+      <button id="resetBtn" class="secondary">Hard Reset</button>
+    </div>
+
+    <header class="hero">
+      <div class="kicker">Legend Mastery Series • American Studies Bellringer Set A</div>
+      <h1 id="gameTitle">Game</h1>
+      <p id="gameSub" class="sub"></p>
+
+      <div class="pills">
+        <span id="gameMeta" class="pill"></span>
+        <span class="pill">Auto-Submit</span>
+        <span class="pill">No Ticket Unless Perfect</span>
+      </div>
+    </header>
+
+    <main class="game-shell" style="margin-top: 20px;">
+
+      <section id="startPanel" class="start">
+        <h2>Name Entry Required</h2>
+        <p class="muted">
+          Enter your name, then complete all 9 questions. One miss means no ticket.
+          You must restart for a perfect run.
+        </p>
+
+        <input
+          id="studentName"
+          class="input"
+          placeholder="First and last name"
+          autocomplete="name"
+        />
+
+        <button id="startBtn">Start Game</button>
+      </section>
+
+      <section id="gamePanel" class="hide">
+        <div class="hud">
+          <div>
+            <span class="label">Progress</span>
+            <b id="progress">1 / 9</b>
+          </div>
+
+          <div>
+            <span class="label">Accuracy</span>
+            <b id="acc">100%</b>
+          </div>
+
+          <div>
+            <span class="label">Misses</span>
+            <b id="misses">0</b>
+          </div>
+
+          <div>
+            <span class="label">Timer</span>
+            <b id="timer">0:00</b>
+          </div>
+        </div>
+
+        <p id="csLine" class="muted small"></p>
+        <div id="qText" class="question"></div>
+        <div id="choices" class="choices"></div>
+        <div id="feedback" class="feedback"></div>
+      </section>
+
+      <section id="finishPanel" class="hide">
+        <h2 id="finishTitle"></h2>
+        <p id="finishMsg" class="muted"></p>
+
+        <div id="ticket"></div>
+
+        <div class="btn-row">
+          <button id="resetBtn2">Hard Reset / Try Again</button>
+          <a class="btn secondary" href="../index.html">Back to Hub</a>
+        </div>
+      </section>
+
+      <div id="errorBox" class="errorbox hide"></div>
+
+    </main>
+
+    <p class="footer small">
+      Correct answer required to advance • Hint on miss • Explanation shown after correct answer
+    </p>
+
+  </div>
+
+  <script>
+    /*
+      ============================================================
+      QUESTION BANK — EDIT HERE
+      ============================================================
+
+      To edit a question:
+      1. Change the question text.
+      2. Change any choice text.
+      3. Set answer to "A", "B", "C", or "D".
+      4. Keep each game at 9 questions.
+      5. Hints should guide students without revealing the answer.
+      6. Explanations appear after a correct answer and linger about 5 seconds.
+    */
+
+    const GAME = {
+  "title": "Game 4 — Industrialization & Progressive Era",
+  "subtitle": "Corporations, Labor, Immigration, Urbanization, Progressivism",
+  "cs": "CS 8–13",
+  "key": "amstud_bellringer_set_a_game_4",
+  "questions": [
+    {
+      "id": "Q37",
+      "question": "What was a major effect of industrialization on American cities in the late 1800s?",
+      "choices": [
+        "Urban populations declined",
+        "Cities grew rapidly as people moved for factory jobs",
+        "Agricultural production increased",
+        "Immigration stopped"
+      ],
+      "answer": "B",
+      "explanation": "Industrialization created millions of factory jobs that drew both immigrants and rural Americans into urban centers. This rapid growth led to overcrowding, tenements, and new social challenges, transforming the nation’s demographics.",
+      "cs": "CS 8",
+      "efl": "Analyze effects of industrialization",
+      "hint": "Factory jobs pulled people into cities."
+    },
+    {
+      "id": "Q38",
+      "question": "How did the invention of the Bessemer process affect the U.S. economy?",
+      "choices": [
+        "It limited steel production",
+        "It made steel cheaper and increased industrial growth",
+        "It reduced the need for railroads",
+        "It slowed the construction of skyscrapers"
+      ],
+      "answer": "B",
+      "explanation": "The Bessemer process allowed steel to be mass-produced more quickly and cheaply. Affordable steel fueled expansion in railroads, construction, and manufacturing, helping the United States become a leading industrial nation.",
+      "cs": "CS 8",
+      "efl": "Analyze technological innovation and heavy industry",
+      "hint": "Cheaper steel fueled railroads, skyscrapers, and manufacturing."
+    },
+    {
+      "id": "Q39",
+      "question": "What was one effect of the growth of railroad networks during industrialization?",
+      "choices": [
+        "Decline in national markets",
+        "Slower transportation of goods",
+        "Expansion of nationwide trade",
+        "Collapse of cities"
+      ],
+      "answer": "C",
+      "explanation": "Railroads linked distant regions, making it possible to ship goods quickly and cheaply across the country. This created national markets, encouraged specialization, and supported the rise of large corporations. WEDNESDAY (2 MCQs) Content: CS 13 + OST Recall",
+      "cs": "CS 8",
+      "efl": "Analyze railroads and national markets",
+      "hint": "Railroads connected regions and expanded trade."
+    },
+    {
+      "id": "Q40",
+      "question": "Why did many immigrants settle in ethnic neighborhoods such as Little Italy or Chinatown?",
+      "choices": [
+        "To avoid factory jobs",
+        "To access support networks among people with similar languages and traditions",
+        "To reduce trade",
+        "To limit transportation options"
+      ],
+      "answer": "B",
+      "explanation": "Ethnic neighborhoods offered social connections, familiar customs, and mutual support for newcomers adjusting to life in the United States. These communities helped immigrants find housing, work, and cultural stability.",
+      "cs": "CS 10",
+      "efl": "Analyze immigration and ethnic neighborhoods",
+      "hint": "Immigrant neighborhoods offered support through language, culture, and jobs."
+    },
+    {
+      "id": "Q41",
+      "question": "What was one problem caused by rapid urbanization?",
+      "choices": [
+        "Decrease in population density",
+        "Rise of spacious housing",
+        "Overcrowded tenements and unsanitary conditions",
+        "Decline of industrial jobs"
+      ],
+      "answer": "C",
+      "explanation": "As cities expanded faster than infrastructure could support, immigrants and workers were forced into overcrowded, poorly ventilated tenements. These conditions spread diseases and underscored the need for urban reforms. FRIDAY (1 MCQ) Content: CS 13 — Industrialization Impacts",
+      "cs": "CS 10",
+      "efl": "Analyze urbanization problems",
+      "hint": "Rapid urban growth often meant overcrowding and poor sanitation."
+    },
+    {
+      "id": "Q42",
+      "question": "What was a major effect of mechanization on farming?",
+      "choices": [
+        "Increased need for manual labor",
+        "Decreased agricultural production",
+        "More efficient crop production with fewer workers",
+        "Decline in crop exports"
+      ],
+      "answer": "C",
+      "explanation": "Advances in machinery such as reapers and tractors reduced the number of workers needed while increasing output. This pushed many rural Americans toward cities and contributed to long-term migration patterns.",
+      "cs": "CS 8",
+      "efl": "Analyze mechanized farming",
+      "hint": "Machines increased output while reducing labor needs."
+    },
+    {
+      "id": "Q86",
+      "question": "What was a major purpose of Progressive Era reforms?",
+      "choices": [
+        "Increase monopolies",
+        "Address problems caused by industrialization",
+        "Expand laissez-faire policies",
+        "Limit public education"
+      ],
+      "answer": "B",
+      "explanation": "Progressives sought to reduce corruption, improve working conditions, regulate big business, and address issues like poverty and unsafe housing created by rapid industrialization.",
+      "cs": "CS 13",
+      "efl": "Analyze Progressive Era reforms",
+      "hint": "Progressives targeted problems caused by industrial capitalism and urbanization."
+    },
+    {
+      "id": "Q91",
+      "question": "What was one reason factories hired child labor during industrialization?",
+      "choices": [
+        "Children demanded high wages",
+        "Children lacked the physical ability to work",
+        "Children could be paid less and fit into small spaces",
+        "Government encouraged child labor"
+      ],
+      "answer": "C",
+      "explanation": "Factory owners exploited children for dangerous, low-wage work. Their small size suited tasks in mines and mills, highlighting the need for Progressive Era workplace reforms.",
+      "cs": "CS 9",
+      "efl": "Explain labor problems and child labor",
+      "hint": "Factory owners used children because they could be paid less."
+    },
+    {
+      "id": "Q92",
+      "question": "What was one purpose of the Chinese Exclusion Act?",
+      "choices": [
+        "Encourage immigration from Asia",
+        "Ban Chinese labor immigration due to economic competition",
+        "Grant citizenship to Chinese immigrants",
+        "Expand trade with China"
+      ],
+      "answer": "B",
+      "explanation": "Rising job competition and racial prejudice led Congress to ban Chinese labor immigration. This was the first major federal law restricting immigration by nationality or ethnicity.",
+      "cs": "CS 10",
+      "efl": "Analyze nativism and immigration restriction",
+      "hint": "The Chinese Exclusion Act is tied to nativism and labor competition."
+    }
+  ]
+};
+
+    /*
+      ============================================================
+      GAME ENGINE — DO NOT EDIT UNLESS CHANGING GAME BEHAVIOR
+      ============================================================
+    */
+
+    const $ = (id) => document.getElementById(id);
+
+    let order = [];
+    let idx = 0;
+    let misses = 0;
+    let attempts = 0;
+    let startMs = null;
+    let timer = null;
+    let student = "";
+    let locked = false;
+
+    function showError(message) {
+      $("errorBox").classList.remove("hide");
+      $("errorBox").textContent = message;
+    }
+
+    window.addEventListener("error", (event) => {
+      showError("Game error: " + event.message);
+    });
+
+    window.addEventListener("unhandledrejection", (event) => {
+      const reason = event.reason?.message || event.reason;
+      showError("Game promise error: " + reason);
+    });
+
+    function pad(number) {
+      return String(number).padStart(2, "0");
+    }
+
+    function timeStr(date) {
+      return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    }
+
+    function elapsed() {
+      const seconds = Math.floor((Date.now() - startMs) / 1000);
+      return `${Math.floor(seconds / 60)}:${pad(seconds % 60)}`;
+    }
+
+    function accuracy() {
+      if (!attempts) return 100;
+      return Math.round(((attempts - misses) / attempts) * 100);
+    }
+
+    function hardReset() {
+      try {
+        sessionStorage.removeItem(GAME.key);
+        localStorage.removeItem(GAME.key);
+      } catch (error) {
+        console.warn("Storage clear skipped:", error);
+      }
+
+      location.reload();
+    }
+
+    function startGame() {
+      student = $("studentName").value.trim();
+
+      if (!student) {
+        showError("Enter your name to begin.");
+        return;
+      }
+
+      $("startPanel").classList.add("hide");
+      $("gamePanel").classList.remove("hide");
+
+      startMs = Date.now();
+      order = GAME.questions.map((_, index) => index);
+      idx = 0;
+      misses = 0;
+      attempts = 0;
+
+      timer = setInterval(updateHud, 500);
+
+      render();
+    }
+
+    function updateHud() {
+      $("progress").textContent = `${Math.min(idx + 1, GAME.questions.length)} / ${GAME.questions.length}`;
+      $("acc").textContent = accuracy() + "%";
+      $("misses").textContent = misses;
+      $("timer").textContent = startMs ? elapsed() : "0:00";
+    }
+
+    function render() {
+      locked = false;
+      updateHud();
+
+      const question = GAME.questions[order[idx]];
+
+      $("qText").textContent = question.question;
+      $("csLine").textContent = question.cs + " • " + question.efl;
+      $("feedback").innerHTML =
+        "Choose the best answer. Incorrect choices give a hint but do not reveal the answer.";
+
+      const choicesBox = $("choices");
+      choicesBox.innerHTML = "";
+
+      const letters = ["A", "B", "C", "D"];
+
+      question.choices.forEach((choiceText, index) => {
+        const button = document.createElement("button");
+        button.className = "choice";
+        button.innerHTML = `<b>${letters[index]}.</b> ${choiceText}`;
+        button.onclick = () => choose(index, button);
+        choicesBox.appendChild(button);
+      });
+    }
+
+    function choose(index, button) {
+      if (locked) return;
+
+      const question = GAME.questions[order[idx]];
+      const chosen = "ABCD"[index];
+
+      attempts++;
+
+      if (chosen === question.answer) {
+        locked = true;
+        button.classList.add("correct");
+
+        $("feedback").innerHTML = "<b>Correct.</b><br>" + question.explanation;
+
+        updateHud();
+
+        setTimeout(() => {
+          idx++;
+
+          if (idx >= GAME.questions.length) {
+            finish();
+          } else {
+            render();
+          }
+        }, 5000);
+
+      } else {
+        misses++;
+        button.classList.add("incorrect");
+        button.disabled = true;
+
+        $("feedback").innerHTML = "<b>Not yet.</b> Hint: " + question.hint;
+
+        updateHud();
+      }
+    }
+
+    function finish() {
+      clearInterval(timer);
+
+      $("gamePanel").classList.add("hide");
+      $("finishPanel").classList.remove("hide");
+
+      const end = new Date();
+      const perfectRun = misses === 0;
+
+      $("finishTitle").textContent = perfectRun
+        ? "Perfect Run — Submit Ticket"
+        : "Mastery required — restart";
+
+      $("finishMsg").textContent = perfectRun
+        ? "Show this ticket to your teacher."
+        : "No ticket generated. Restart and complete a perfect run.";
+
+      const ticket = $("ticket");
+      ticket.className = perfectRun ? "ticket" : "ticket danger";
+
+      if (perfectRun) {
+        ticket.innerHTML = `
+          <h2>Submit Ticket</h2>
+
+          <div class="ticket-grid">
+            <div>
+              <span class="label">Student</span>
+              <b>${student}</b>
+            </div>
+
+            <div>
+              <span class="label">Date</span>
+              <b>${end.toLocaleDateString()}</b>
+            </div>
+
+            <div>
+              <span class="label">Start Time</span>
+              <b>${timeStr(new Date(startMs))}</b>
+            </div>
+
+            <div>
+              <span class="label">End Time</span>
+              <b>${timeStr(end)}</b>
+            </div>
+
+            <div>
+              <span class="label">Runtime</span>
+              <b>${elapsed()}</b>
+            </div>
+
+            <div>
+              <span class="label">Accuracy</span>
+              <b>${accuracy()}%</b>
+            </div>
+
+            <div>
+              <span class="label">Misses</span>
+              <b>${misses}</b>
+            </div>
+
+            <div>
+              <span class="label">Result</span>
+              <b>Perfect Run</b>
+            </div>
+          </div>
+        `;
+      } else {
+        ticket.innerHTML = `
+          <h2>Mastery required — restart</h2>
+          <p>You must finish with 0 misses to generate a submit ticket.</p>
+        `;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      $("gameTitle").textContent = GAME.title;
+      $("gameSub").textContent = GAME.subtitle;
+      $("gameMeta").textContent = GAME.cs + " • 9 Questions • Perfect Run Required";
+
+      $("startBtn").onclick = startGame;
+      $("resetBtn").onclick = hardReset;
+      $("resetBtn2").onclick = hardReset;
+    });
+  </script>
+</body>
+</html>
