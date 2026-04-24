@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Game 2 — Expansion & Reform</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+  <div class="wrap">
+
+    <div class="topbar">
+      <a class="btn secondary" href="../index.html">← Back to Hub</a>
+      <button id="resetBtn" class="secondary">Hard Reset</button>
+    </div>
+
+    <header class="hero">
+      <div class="kicker">Legend Mastery Series • American Studies Bellringer Set A</div>
+      <h1 id="gameTitle">Game</h1>
+      <p id="gameSub" class="sub"></p>
+
+      <div class="pills">
+        <span id="gameMeta" class="pill"></span>
+        <span class="pill">Auto-Submit</span>
+        <span class="pill">No Ticket Unless Perfect</span>
+      </div>
+    </header>
+
+    <main class="game-shell" style="margin-top: 20px;">
+
+      <section id="startPanel" class="start">
+        <h2>Name Entry Required</h2>
+        <p class="muted">
+          Enter your name, then complete all 9 questions. One miss means no ticket.
+          You must restart for a perfect run.
+        </p>
+
+        <input
+          id="studentName"
+          class="input"
+          placeholder="First and last name"
+          autocomplete="name"
+        />
+
+        <button id="startBtn">Start Game</button>
+      </section>
+
+      <section id="gamePanel" class="hide">
+        <div class="hud">
+          <div>
+            <span class="label">Progress</span>
+            <b id="progress">1 / 9</b>
+          </div>
+
+          <div>
+            <span class="label">Accuracy</span>
+            <b id="acc">100%</b>
+          </div>
+
+          <div>
+            <span class="label">Misses</span>
+            <b id="misses">0</b>
+          </div>
+
+          <div>
+            <span class="label">Timer</span>
+            <b id="timer">0:00</b>
+          </div>
+        </div>
+
+        <p id="csLine" class="muted small"></p>
+        <div id="qText" class="question"></div>
+        <div id="choices" class="choices"></div>
+        <div id="feedback" class="feedback"></div>
+      </section>
+
+      <section id="finishPanel" class="hide">
+        <h2 id="finishTitle"></h2>
+        <p id="finishMsg" class="muted"></p>
+
+        <div id="ticket"></div>
+
+        <div class="btn-row">
+          <button id="resetBtn2">Hard Reset / Try Again</button>
+          <a class="btn secondary" href="../index.html">Back to Hub</a>
+        </div>
+      </section>
+
+      <div id="errorBox" class="errorbox hide"></div>
+
+    </main>
+
+    <p class="footer small">
+      Correct answer required to advance • Hint on miss • Explanation shown after correct answer
+    </p>
+
+  </div>
+
+  <script>
+    /*
+      ============================================================
+      QUESTION BANK — EDIT HERE
+      ============================================================
+
+      To edit a question:
+      1. Change the question text.
+      2. Change any choice text.
+      3. Set answer to "A", "B", "C", or "D".
+      4. Keep each game at 9 questions.
+      5. Hints should guide students without revealing the answer.
+      6. Explanations appear after a correct answer and linger about 5 seconds.
+    */
+
+    const GAME = {
+  "title": "Game 2 — Expansion & Reform",
+  "subtitle": "Westward Expansion, Reform Movements, American Indians, Reservation Policy",
+  "cs": "CS 10–11",
+  "key": "amstud_bellringer_set_a_game_2",
+  "questions": [
+    {
+      "id": "Q19",
+      "question": "What was one effect of the abolitionist movement?",
+      "choices": [
+        "Increased support for slavery",
+        "Growing sectional tensions between North and South",
+        "Federal protection of slavery",
+        "Creation of new slave states"
+      ],
+      "answer": "B",
+      "explanation": "Abolitionism intensified national divisions by challenging the economic and political foundations of slavery. As activists demanded emancipation, southern states resisted fiercely, deepening sectional conflict that led toward the Civil War.",
+      "cs": "CS 10",
+      "efl": "Explain antebellum reform and sectional tension",
+      "hint": "Abolition challenged slavery directly, increasing North-South conflict."
+    },
+    {
+      "id": "Q20",
+      "question": "How did the Seneca Falls Convention contribute to social reform?",
+      "choices": [
+        "It promoted temperance laws",
+        "It marked the beginning of the women’s rights movement",
+        "It ended gender discrimination",
+        "It opposed public education"
+      ],
+      "answer": "B",
+      "explanation": "Seneca Falls (1848) was the first organized convention for women’s rights, issuing the Declaration of Sentiments. It launched a nationwide movement that continued for decades and ultimately led to the 19th Amendment.",
+      "cs": "CS 10",
+      "efl": "Explain social reform movements",
+      "hint": "Seneca Falls is tied to organized women’s rights activism."
+    },
+    {
+      "id": "Q21",
+      "question": "What was the goal of the temperance movement?",
+      "choices": [
+        "Abolish slavery",
+        "Limit immigration",
+        "Reduce alcohol consumption",
+        "Expand public schooling"
+      ],
+      "answer": "C",
+      "explanation": "Temperance advocates believed alcohol abuse caused social problems such as poverty, domestic violence, and moral decline. Their efforts led to widespread reform and eventually the 18th Amendment establishing Prohibition. WEDNESDAY (2 MCQs) Content: CS 10 + OST Recall",
+      "cs": "CS 10",
+      "efl": "Explain temperance reform",
+      "hint": "Temperance reformers targeted alcohol as a source of social problems."
+    },
+    {
+      "id": "Q22",
+      "question": "Which event contributed to westward expansion in the early 1800s?",
+      "choices": [
+        "Louisiana Purchase",
+        "Spanish-American War",
+        "Reconstruction",
+        "Korean War"
+      ],
+      "answer": "A",
+      "explanation": "The Louisiana Purchase doubled U.S. territory and opened vast western lands for settlement. It encouraged migration, resource exploration, and new economic opportunities while shaping national growth.",
+      "cs": "CS 10",
+      "efl": "Explain early expansion",
+      "hint": "The Louisiana Purchase opened a huge amount of western territory."
+    },
+    {
+      "id": "Q23",
+      "question": "What was one effect of the Second Great Awakening?",
+      "choices": [
+        "Decline of religious participation",
+        "Growth of reform movements such as abolition",
+        "End of missionary work",
+        "Reduced literacy rates"
+      ],
+      "answer": "B",
+      "explanation": "The Second Great Awakening revitalized religious enthusiasm, inspiring believers to improve society. This revival fueled moral reform efforts, including abolitionism and temperance, by linking faith to social action. FRIDAY (1 MCQ) Content: CS 10 — Reform Movements",
+      "cs": "CS 10",
+      "efl": "Explain the Second Great Awakening and reform",
+      "hint": "Religious revival helped inspire reform efforts."
+    },
+    {
+      "id": "Q24",
+      "question": "What did public education reformers like Horace Mann promote?",
+      "choices": [
+        "Privately funded schools only",
+        "Universal public schooling",
+        "Elimination of teacher training",
+        "Reduced government role in education"
+      ],
+      "answer": "B",
+      "explanation": "Reformers argued that a strong democracy required educated citizens. Horace Mann championed free, tax-supported public schools with trained teachers to ensure equal opportunity and civic preparedness.",
+      "cs": "CS 10",
+      "efl": "Explain education reform",
+      "hint": "Horace Mann is connected to free, tax-supported public schools."
+    },
+    {
+      "id": "G2N1",
+      "question": "How did the Homestead Acts affect American Indian nations in the West?",
+      "choices": [
+        "They protected tribal sovereignty from settlement",
+        "They encouraged settlement that increased pressure on American Indian lands",
+        "They ended all conflict between settlers and American Indians",
+        "They created equal land ownership for American Indians"
+      ],
+      "answer": "B",
+      "explanation": "The Homestead Acts encouraged Americans to claim western land, increasing settlement pressure and conflict with American Indian nations already living there.",
+      "cs": "CS 11",
+      "efl": "Explain how westward movement impacted American Indians",
+      "hint": "Think about how offering western land to settlers changed pressure on Native lands."
+    },
+    {
+      "id": "G2N2",
+      "question": "What was one purpose of the Dawes Act?",
+      "choices": [
+        "To divide tribal lands into individual allotments and encourage assimilation",
+        "To return all reservation lands to tribal governments",
+        "To protect the Ghost Dance movement",
+        "To end Americanization policies"
+      ],
+      "answer": "A",
+      "explanation": "The Dawes Act divided tribal lands into individual allotments in an effort to weaken tribal identity and force assimilation into white American farming culture.",
+      "cs": "CS 11",
+      "efl": "Explain reservation policy and assimilation",
+      "hint": "The Dawes Act is linked to allotment and assimilation."
+    },
+    {
+      "id": "G2N3",
+      "question": "Which event symbolized the violent end of major armed conflict between the U.S. government and Plains Indians?",
+      "choices": [
+        "Battle of Saratoga",
+        "Wounded Knee Massacre",
+        "Battle of New Orleans",
+        "Pullman Strike"
+      ],
+      "answer": "B",
+      "explanation": "The Wounded Knee Massacre became a symbol of the violent consequences of U.S. expansion, reservation policy, and attempts to suppress American Indian resistance.",
+      "cs": "CS 11",
+      "efl": "Explain consequences of conflicts in the West",
+      "hint": "Look for the event from the Plains conflicts, not the Revolution or labor unrest."
+    }
+  ]
+};
+
+    /*
+      ============================================================
+      GAME ENGINE — DO NOT EDIT UNLESS CHANGING GAME BEHAVIOR
+      ============================================================
+    */
+
+    const $ = (id) => document.getElementById(id);
+
+    let order = [];
+    let idx = 0;
+    let misses = 0;
+    let attempts = 0;
+    let startMs = null;
+    let timer = null;
+    let student = "";
+    let locked = false;
+
+    function showError(message) {
+      $("errorBox").classList.remove("hide");
+      $("errorBox").textContent = message;
+    }
+
+    window.addEventListener("error", (event) => {
+      showError("Game error: " + event.message);
+    });
+
+    window.addEventListener("unhandledrejection", (event) => {
+      const reason = event.reason?.message || event.reason;
+      showError("Game promise error: " + reason);
+    });
+
+    function pad(number) {
+      return String(number).padStart(2, "0");
+    }
+
+    function timeStr(date) {
+      return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    }
+
+    function elapsed() {
+      const seconds = Math.floor((Date.now() - startMs) / 1000);
+      return `${Math.floor(seconds / 60)}:${pad(seconds % 60)}`;
+    }
+
+    function accuracy() {
+      if (!attempts) return 100;
+      return Math.round(((attempts - misses) / attempts) * 100);
+    }
+
+    function hardReset() {
+      try {
+        sessionStorage.removeItem(GAME.key);
+        localStorage.removeItem(GAME.key);
+      } catch (error) {
+        console.warn("Storage clear skipped:", error);
+      }
+
+      location.reload();
+    }
+
+    function startGame() {
+      student = $("studentName").value.trim();
+
+      if (!student) {
+        showError("Enter your name to begin.");
+        return;
+      }
+
+      $("startPanel").classList.add("hide");
+      $("gamePanel").classList.remove("hide");
+
+      startMs = Date.now();
+      order = GAME.questions.map((_, index) => index);
+      idx = 0;
+      misses = 0;
+      attempts = 0;
+
+      timer = setInterval(updateHud, 500);
+
+      render();
+    }
+
+    function updateHud() {
+      $("progress").textContent = `${Math.min(idx + 1, GAME.questions.length)} / ${GAME.questions.length}`;
+      $("acc").textContent = accuracy() + "%";
+      $("misses").textContent = misses;
+      $("timer").textContent = startMs ? elapsed() : "0:00";
+    }
+
+    function render() {
+      locked = false;
+      updateHud();
+
+      const question = GAME.questions[order[idx]];
+
+      $("qText").textContent = question.question;
+      $("csLine").textContent = question.cs + " • " + question.efl;
+      $("feedback").innerHTML =
+        "Choose the best answer. Incorrect choices give a hint but do not reveal the answer.";
+
+      const choicesBox = $("choices");
+      choicesBox.innerHTML = "";
+
+      const letters = ["A", "B", "C", "D"];
+
+      question.choices.forEach((choiceText, index) => {
+        const button = document.createElement("button");
+        button.className = "choice";
+        button.innerHTML = `<b>${letters[index]}.</b> ${choiceText}`;
+        button.onclick = () => choose(index, button);
+        choicesBox.appendChild(button);
+      });
+    }
+
+    function choose(index, button) {
+      if (locked) return;
+
+      const question = GAME.questions[order[idx]];
+      const chosen = "ABCD"[index];
+
+      attempts++;
+
+      if (chosen === question.answer) {
+        locked = true;
+        button.classList.add("correct");
+
+        $("feedback").innerHTML = "<b>Correct.</b><br>" + question.explanation;
+
+        updateHud();
+
+        setTimeout(() => {
+          idx++;
+
+          if (idx >= GAME.questions.length) {
+            finish();
+          } else {
+            render();
+          }
+        }, 5000);
+
+      } else {
+        misses++;
+        button.classList.add("incorrect");
+        button.disabled = true;
+
+        $("feedback").innerHTML = "<b>Not yet.</b> Hint: " + question.hint;
+
+        updateHud();
+      }
+    }
+
+    function finish() {
+      clearInterval(timer);
+
+      $("gamePanel").classList.add("hide");
+      $("finishPanel").classList.remove("hide");
+
+      const end = new Date();
+      const perfectRun = misses === 0;
+
+      $("finishTitle").textContent = perfectRun
+        ? "Perfect Run — Submit Ticket"
+        : "Mastery required — restart";
+
+      $("finishMsg").textContent = perfectRun
+        ? "Show this ticket to your teacher."
+        : "No ticket generated. Restart and complete a perfect run.";
+
+      const ticket = $("ticket");
+      ticket.className = perfectRun ? "ticket" : "ticket danger";
+
+      if (perfectRun) {
+        ticket.innerHTML = `
+          <h2>Submit Ticket</h2>
+
+          <div class="ticket-grid">
+            <div>
+              <span class="label">Student</span>
+              <b>${student}</b>
+            </div>
+
+            <div>
+              <span class="label">Date</span>
+              <b>${end.toLocaleDateString()}</b>
+            </div>
+
+            <div>
+              <span class="label">Start Time</span>
+              <b>${timeStr(new Date(startMs))}</b>
+            </div>
+
+            <div>
+              <span class="label">End Time</span>
+              <b>${timeStr(end)}</b>
+            </div>
+
+            <div>
+              <span class="label">Runtime</span>
+              <b>${elapsed()}</b>
+            </div>
+
+            <div>
+              <span class="label">Accuracy</span>
+              <b>${accuracy()}%</b>
+            </div>
+
+            <div>
+              <span class="label">Misses</span>
+              <b>${misses}</b>
+            </div>
+
+            <div>
+              <span class="label">Result</span>
+              <b>Perfect Run</b>
+            </div>
+          </div>
+        `;
+      } else {
+        ticket.innerHTML = `
+          <h2>Mastery required — restart</h2>
+          <p>You must finish with 0 misses to generate a submit ticket.</p>
+        `;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      $("gameTitle").textContent = GAME.title;
+      $("gameSub").textContent = GAME.subtitle;
+      $("gameMeta").textContent = GAME.cs + " • 9 Questions • Perfect Run Required";
+
+      $("startBtn").onclick = startGame;
+      $("resetBtn").onclick = hardReset;
+      $("resetBtn2").onclick = hardReset;
+    });
+  </script>
+</body>
+</html>
