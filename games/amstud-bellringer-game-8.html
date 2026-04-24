@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>American Studies Bellringer Game 8 — Modern America & Global Issues</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="hero">
+      <div class="kicker">Legend Mastery Series • American Studies Bellringers • Set A</div>
+      <h1>Game 8: Modern America & Global Issues</h1>
+      <p class="sub">
+        CS 31–33 mastery practice: globalization, domestic policy challenges, and post-Cold War foreign policy.
+      </p>
+
+      <div class="pills">
+        <span class="pill">9 Questions</span>
+        <span class="pill">CS 31–33</span>
+        <span class="pill">Perfect Run Required</span>
+        <span class="pill">Auto-Submit on Click</span>
+      </div>
+
+      <p style="margin-top:14px;">
+        <a class="btn secondary" href="../index.html">← Back to Hub</a>
+      </p>
+    </header>
+
+    <main class="game-shell">
+
+      <section id="startScreen" class="start">
+        <h2>Start Game 8</h2>
+        <p class="sub">
+          Enter your name. A submit ticket only appears after a perfect run with zero misses.
+        </p>
+
+        <input id="studentName" type="text" placeholder="Enter first and last name" autocomplete="name" />
+
+        <div class="btn-row">
+          <button class="btn" id="startBtn" type="button">Start</button>
+          <button class="btn secondary" id="hardResetStartBtn" type="button">Hard Reset</button>
+        </div>
+
+        <div id="startError" class="error-box" style="display:none;"></div>
+      </section>
+
+      <section id="gameScreen" style="display:none;">
+
+        <div class="hud">
+          <div class="hud-box">
+            <strong>Progress</strong><br />
+            <span id="progressText">1 / 9</span>
+          </div>
+
+          <div class="hud-box">
+            <strong>Accuracy</strong><br />
+            <span id="accuracyText">100%</span>
+          </div>
+
+          <div class="hud-box">
+            <strong>Misses</strong><br />
+            <span id="missesText">0</span>
+          </div>
+
+          <div class="hud-box">
+            <strong>Timer</strong><br />
+            <span id="timerText">00:00</span>
+          </div>
+        </div>
+
+        <div class="repo-card">
+          <div class="kicker" id="standardText">CS 31</div>
+          <div class="question" id="questionText"></div>
+          <div class="choices" id="choices"></div>
+          <div class="feedback" id="feedback">
+            Choose the best answer.
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn secondary" id="hardResetGameBtn" type="button">Hard Reset</button>
+        </div>
+
+        <div id="errorBox" class="error-box" style="display:none;"></div>
+      </section>
+
+      <section id="endScreen" style="display:none;">
+        <div class="repo-card" id="endCard"></div>
+
+        <div class="btn-row">
+          <button class="btn" id="restartBtn" type="button">Restart for Perfect Run</button>
+          <a class="btn secondary" href="../index.html">Back to Hub</a>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      American Studies Spiral Bellringer Hub • Set A • Legend Mastery Series
+    </footer>
+
+  </div>
+
+<script>
+/* =========================================================
+   AMERICAN STUDIES BELLRINGER GAME 8
+   Modern America & Global Issues — CS 31–33
+   Clean / Expanded Editable Version
+========================================================= */
+
+/* =========================
+   QUESTION BANK
+   Edit questions here.
+========================= */
+const QUESTIONS = [
+  {
+    "id": "G8-Q1",
+    "cs": "CS 31",
+    "efl": "Analyze how global communications, international trade, overseas competition, and the shift from manufacturing to service industries impacted the American economy.",
+    "question": "Which change BEST reflects the impact of improved global communications on the American economy since the 1990s?",
+    "choices": [
+      "Businesses became less connected to overseas markets.",
+      "Companies could communicate and coordinate work across the world more quickly.",
+      "The United States returned mainly to an agricultural economy.",
+      "International trade became impossible for most companies."
+    ],
+    "answer": "Companies could communicate and coordinate work across the world more quickly.",
+    "hint": "Think about how computers, the internet, mobile phones, and digital communication changed business speed and reach.",
+    "explanation": "Improved global communication made it easier for American businesses to share information, coordinate supply chains, serve customers, and compete in international markets."
+  },
+  {
+    "id": "G8-Q2",
+    "cs": "CS 31",
+    "efl": "Analyze how global economic forces changed American jobs and industries.",
+    "question": "What was one major effect of overseas competition and international trade on many American manufacturing communities?",
+    "choices": [
+      "Manufacturing jobs increased in every region.",
+      "Factories faced pressure from lower-cost foreign production.",
+      "The service economy disappeared.",
+      "Trade deficits ended completely."
+    ],
+    "answer": "Factories faced pressure from lower-cost foreign production.",
+    "hint": "Focus on the effect of global competition on factories and local communities.",
+    "explanation": "Overseas competition challenged American producers because some goods could be made more cheaply abroad. This contributed to plant closings, job losses in manufacturing, and a shift toward service and technology jobs."
+  },
+  {
+    "id": "G8-Q3",
+    "cs": "CS 31",
+    "efl": "Analyze the shift from manufacturing to service and information technology jobs.",
+    "question": "Which trend shows the shift in the American economy from manufacturing toward service and information industries?",
+    "choices": [
+      "Growth in information technology and service-sector jobs",
+      "A complete end to global trade",
+      "A return to mostly hand-made production",
+      "A decline in computer use by businesses"
+    ],
+    "answer": "Growth in information technology and service-sector jobs",
+    "hint": "Look for the answer that connects to technology, services, and new types of employment.",
+    "explanation": "As manufacturing declined in some areas, the economy grew in service-sector work and information technology. This changed the skills workers needed and reshaped local and national economic patterns."
+  },
+  {
+    "id": "G8-Q4",
+    "cs": "CS 32",
+    "efl": "Explain domestic policy challenges after the Cold War and following September 11, 2001.",
+    "question": "Which domestic policy debate became more important after the terrorist attacks of September 11, 2001?",
+    "choices": [
+      "How to balance national security with civil liberties",
+      "Whether to join the League of Nations",
+      "Whether to end all airport security",
+      "How to return to complete isolationism"
+    ],
+    "answer": "How to balance national security with civil liberties",
+    "hint": "Think about the Patriot Act, airport security, and concerns over government power.",
+    "explanation": "After 9/11, the government expanded security efforts through laws and agencies such as the USA PATRIOT Act and the TSA. This created debates over protecting the nation while preserving civil liberties."
+  },
+  {
+    "id": "G8-Q5",
+    "cs": "CS 32",
+    "efl": "Explain social and political challenges in post-Cold War domestic policy.",
+    "question": "Which issue reflects a continuing debate between state and federal government authority in the post-Cold War era?",
+    "choices": [
+      "The ratification of the 13th Amendment",
+      "The annexation of Hawaii",
+      "Gun rights and gun control",
+      "The creation of the Articles of Confederation"
+    ],
+    "answer": "Gun rights and gun control",
+    "hint": "Look for a modern domestic issue where different levels of government often disagree.",
+    "explanation": "Gun rights and gun control remain part of the ongoing debate over the proper role of state and federal governments in regulating political and social issues."
+  },
+  {
+    "id": "G8-Q6",
+    "cs": "CS 32",
+    "efl": "Explain economic challenges in the post-Cold War period.",
+    "question": "Which economic challenge is connected to the post-Cold War and post-9/11 domestic policy era?",
+    "choices": [
+      "The mortgage crisis and government bailouts",
+      "The Whiskey Rebellion",
+      "The failure of Reconstruction governments",
+      "The debate over the Treaty of Versailles"
+    ],
+    "answer": "The mortgage crisis and government bailouts",
+    "hint": "Choose the modern economic challenge tied to government response and economic instability.",
+    "explanation": "The mortgage crisis and government bailouts became major domestic policy challenges. They raised questions about the role of government in stabilizing the economy during financial emergencies."
+  },
+  {
+    "id": "G8-Q7",
+    "cs": "CS 33",
+    "efl": "Explain foreign policy challenges in the post-Cold War period and after September 11, 2001.",
+    "question": "Which foreign policy challenge became especially important for the United States after the Cold War and 9/11?",
+    "choices": [
+      "Avoiding all international cooperation",
+      "Responding to terrorism and instability in the Middle East",
+      "Rebuilding Europe through the Marshall Plan",
+      "Ending westward expansion"
+    ],
+    "answer": "Responding to terrorism and instability in the Middle East",
+    "hint": "Think about the War on Terror and the role of the United States in the Middle East.",
+    "explanation": "After 9/11, U.S. foreign policy focused heavily on terrorism, unrest in the Middle East, and the role of military action and international cooperation in addressing threats."
+  },
+  {
+    "id": "G8-Q8",
+    "cs": "CS 33",
+    "efl": "Explain economic challenges of a globalized world.",
+    "question": "Which issue is an economic challenge of globalization identified in the post-Cold War world?",
+    "choices": [
+      "The balance of trade and outsourcing of U.S. jobs",
+      "The use of cash-and-carry before World War II",
+      "The creation of the Freedmen\u2019s Bureau",
+      "The purchase of the Louisiana Territory"
+    ],
+    "answer": "The balance of trade and outsourcing of U.S. jobs",
+    "hint": "Look for the answer connected to international trade and jobs moving across borders.",
+    "explanation": "Globalization created economic challenges such as trade deficits, international economic partnerships, and outsourcing. These issues affected American workers, businesses, and communities."
+  },
+  {
+    "id": "G8-Q9",
+    "cs": "CS 33",
+    "efl": "Explain social, political, military, and security challenges in foreign policy after 1991.",
+    "question": "Why did the control of weapons of mass destruction become a major U.S. foreign policy concern after the Cold War?",
+    "choices": [
+      "They threatened world stability if controlled by hostile states or terrorist groups.",
+      "They ended the need for national security policy.",
+      "They were only used during the Civil War.",
+      "They made international diplomacy unnecessary."
+    ],
+    "answer": "They threatened world stability if controlled by hostile states or terrorist groups.",
+    "hint": "Focus on why dangerous weapons in unstable regions would concern U.S. leaders.",
+    "explanation": "Weapons of mass destruction became a major concern because hostile governments or terrorist groups could use them to threaten regional and global stability. This shaped U.S. foreign policy after the Cold War."
+  }
+];
+
+/* =========================
+   GAME STATE
+========================= */
+const GAME_TITLE = "American Studies Bellringer Game 8 — Modern America & Global Issues";
+const STORAGE_KEY = "amstud-bellringer-game-8-state";
+
+let studentName = "";
+let currentIndex = 0;
+let misses = 0;
+let totalClicks = 0;
+let locked = false;
+let startTime = null;
+let timerInterval = null;
+
+/* =========================
+   ELEMENTS
+========================= */
+const startScreen = document.getElementById("startScreen");
+const gameScreen = document.getElementById("gameScreen");
+const endScreen = document.getElementById("endScreen");
+
+const studentNameInput = document.getElementById("studentName");
+const startBtn = document.getElementById("startBtn");
+const hardResetStartBtn = document.getElementById("hardResetStartBtn");
+const hardResetGameBtn = document.getElementById("hardResetGameBtn");
+const restartBtn = document.getElementById("restartBtn");
+
+const startError = document.getElementById("startError");
+const errorBox = document.getElementById("errorBox");
+
+const progressText = document.getElementById("progressText");
+const accuracyText = document.getElementById("accuracyText");
+const missesText = document.getElementById("missesText");
+const timerText = document.getElementById("timerText");
+const standardText = document.getElementById("standardText");
+const questionText = document.getElementById("questionText");
+const choices = document.getElementById("choices");
+const feedback = document.getElementById("feedback");
+const endCard = document.getElementById("endCard");
+
+/* =========================
+   ERROR HANDLING
+========================= */
+window.addEventListener("error", function(event) {
+  showError("A game error occurred:\n" + event.message);
+});
+
+window.addEventListener("unhandledrejection", function(event) {
+  showError("A game promise error occurred:\n" + event.reason);
+});
+
+function showError(message) {
+  errorBox.style.display = "block";
+  errorBox.textContent = message;
+}
+
+/* =========================
+   DATE / TIME HELPERS
+========================= */
+function formatClock(date) {
+  return date.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  });
+}
+
+function formatDate(date) {
+  return date.toLocaleDateString();
+}
+
+function formatElapsed(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+
+  return String(mins).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
+}
+
+function getElapsedSeconds() {
+  if (!startTime) return 0;
+  return Math.floor((Date.now() - startTime.getTime()) / 1000);
+}
+
+/* =========================
+   TIMER
+========================= */
+function startTimer() {
+  stopTimer();
+
+  timerInterval = setInterval(function() {
+    timerText.textContent = formatElapsed(getElapsedSeconds());
+    saveState();
+  }, 1000);
+}
+
+function stopTimer() {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+}
+
+/* =========================
+   ACCURACY
+   Misses are permanent for the attempt.
+========================= */
+function getAccuracy() {
+  if (totalClicks === 0) return 100;
+  const correctClicks = QUESTIONS.length;
+  const denominator = QUESTIONS.length + misses;
+  return Math.round((correctClicks / denominator) * 100);
+}
+
+function updateHud() {
+  progressText.textContent = (currentIndex + 1) + " / " + QUESTIONS.length;
+  accuracyText.textContent = getAccuracy() + "%";
+  missesText.textContent = misses;
+  timerText.textContent = formatElapsed(getElapsedSeconds());
+}
+
+/* =========================
+   SAVE / RESTORE
+========================= */
+function saveState() {
+  try {
+    const state = {
+      studentName,
+      currentIndex,
+      misses,
+      totalClicks,
+      startTime: startTime ? startTime.toISOString() : null
+    };
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (err) {
+    showError("Could not save game state:\n" + err.message);
+  }
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+
+    const state = JSON.parse(raw);
+
+    studentName = state.studentName || "";
+    currentIndex = state.currentIndex || 0;
+    misses = state.misses || 0;
+    totalClicks = state.totalClicks || 0;
+    startTime = state.startTime ? new Date(state.startTime) : new Date();
+
+    return true;
+  } catch (err) {
+    showError("Could not load saved game state. Use Hard Reset.\n" + err.message);
+    return false;
+  }
+}
+
+function hardReset() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    sessionStorage.clear();
+  } catch (err) {
+    showError("Could not clear saved state:\n" + err.message);
+  }
+
+  window.location.reload();
+}
+
+/* =========================
+   SHUFFLE CHOICES
+   Keeps answer text stable but randomizes letter placement.
+========================= */
+function shuffleArray(array) {
+  const copy = array.slice();
+
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = copy[i];
+    copy[i] = copy[j];
+    copy[j] = temp;
+  }
+
+  return copy;
+}
+
+/* =========================
+   GAME FLOW
+========================= */
+function startGame() {
+  const name = studentNameInput.value.trim();
+
+  if (!name) {
+    startError.style.display = "block";
+    startError.textContent = "Please enter your name before starting.";
+    return;
+  }
+
+  studentName = name;
+  currentIndex = 0;
+  misses = 0;
+  totalClicks = 0;
+  startTime = new Date();
+  locked = false;
+
+  saveState();
+
+  startScreen.style.display = "none";
+  endScreen.style.display = "none";
+  gameScreen.style.display = "block";
+
+  startTimer();
+  renderQuestion();
+}
+
+function renderQuestion() {
+  try {
+    locked = false;
+
+    const item = QUESTIONS[currentIndex];
+    const shuffledChoices = shuffleArray(item.choices);
+
+    standardText.textContent = item.cs + " • " + item.efl;
+    questionText.textContent = item.question;
+    choices.innerHTML = "";
+    feedback.textContent = "Choose the best answer.";
+
+    shuffledChoices.forEach(function(choiceText, index) {
+      const button = document.createElement("button");
+      button.className = "choice";
+      button.type = "button";
+      button.textContent = String.fromCharCode(65 + index) + ") " + choiceText;
+
+      button.addEventListener("click", function() {
+        handleChoice(button, choiceText);
+      });
+
+      choices.appendChild(button);
+    });
+
+    updateHud();
+    saveState();
+  } catch (err) {
+    showError("Could not render question:\n" + err.message);
+  }
+}
+
+function handleChoice(button, selectedText) {
+  if (locked) return;
+
+  const item = QUESTIONS[currentIndex];
+  totalClicks++;
+
+  if (selectedText === item.answer) {
+    locked = true;
+    button.classList.add("correct");
+
+    feedback.innerHTML =
+      "<strong>Correct.</strong><br>" +
+      item.explanation +
+      "<br><br><em>Advancing after you read the explanation...</em>";
+
+    updateHud();
+    saveState();
+
+    setTimeout(function() {
+      nextQuestion();
+    }, 5000);
+
+  } else {
+    misses++;
+    button.classList.add("incorrect");
+    button.disabled = true;
+
+    feedback.innerHTML =
+      "<strong>Not yet.</strong><br>" +
+      item.hint +
+      "<br><br><em>You must choose the correct answer to advance.</em>";
+
+    updateHud();
+    saveState();
+  }
+}
+
+function nextQuestion() {
+  currentIndex++;
+
+  if (currentIndex >= QUESTIONS.length) {
+    finishGame();
+    return;
+  }
+
+  renderQuestion();
+}
+
+function finishGame() {
+  stopTimer();
+
+  gameScreen.style.display = "none";
+  endScreen.style.display = "block";
+
+  const endTime = new Date();
+  const elapsedSeconds = getElapsedSeconds();
+  const accuracy = getAccuracy();
+
+  if (misses === 0) {
+    endCard.innerHTML = `
+      <h2>Submit Ticket — Perfect Run</h2>
+      <p class="sub">Show this screen to your teacher.</p>
+
+      <div class="hud">
+        <div class="hud-box"><strong>Name</strong><br>${escapeHtml(studentName)}</div>
+        <div class="hud-box"><strong>Date</strong><br>${formatDate(endTime)}</div>
+        <div class="hud-box"><strong>Start</strong><br>${formatClock(startTime)}</div>
+        <div class="hud-box"><strong>End</strong><br>${formatClock(endTime)}</div>
+        <div class="hud-box"><strong>Runtime</strong><br>${formatElapsed(elapsedSeconds)}</div>
+        <div class="hud-box"><strong>Accuracy</strong><br>${accuracy}%</div>
+        <div class="hud-box"><strong>Misses</strong><br>${misses}</div>
+        <div class="hud-box"><strong>Result</strong><br>Perfect Run</div>
+      </div>
+
+      <p class="sub">
+        ${
+          GAME_TITLE
+        }
+      </p>
+    `;
+  } else {
+    endCard.innerHTML = `
+      <h2>Mastery required — restart</h2>
+      <p class="sub">
+        You completed the game, but this attempt had ${misses} miss(es).
+        No submit ticket is generated unless the run is perfect.
+      </p>
+
+      <div class="hud">
+        <div class="hud-box"><strong>Name</strong><br>${escapeHtml(studentName)}</div>
+        <div class="hud-box"><strong>Runtime</strong><br>${formatElapsed(elapsedSeconds)}</div>
+        <div class="hud-box"><strong>Accuracy</strong><br>${accuracy}%</div>
+        <div class="hud-box"><strong>Misses</strong><br>${misses}</div>
+      </div>
+    `;
+  }
+
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (err) {
+    showError("Could not clear completed attempt:\n" + err.message);
+  }
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+/* =========================
+   BUTTON EVENTS
+========================= */
+startBtn.addEventListener("click", startGame);
+hardResetStartBtn.addEventListener("click", hardReset);
+hardResetGameBtn.addEventListener("click", hardReset);
+restartBtn.addEventListener("click", hardReset);
+
+/* =========================
+   RESTORE SAVED ATTEMPT
+========================= */
+(function init() {
+  const restored = loadState();
+
+  if (restored && studentName) {
+    studentNameInput.value = studentName;
+
+    startScreen.style.display = "none";
+    endScreen.style.display = "none";
+    gameScreen.style.display = "block";
+
+    startTimer();
+    renderQuestion();
+  }
+})();
+</script>
+</body>
+</html>
