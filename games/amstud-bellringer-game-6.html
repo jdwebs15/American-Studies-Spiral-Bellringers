@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Game 6 — Cold War & Social Change</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Game 6 — Cold War & Civil Rights — Legend Mastery Series</title>
   <link rel="stylesheet" href="../styles.css" />
 </head>
 
@@ -12,484 +12,518 @@
 
     <div class="topbar">
       <a class="btn secondary" href="../index.html">← Back to Hub</a>
-      <button id="resetBtn" class="secondary">Hard Reset</button>
+      <button class="btn danger" id="hardResetTop" type="button">Hard Reset</button>
     </div>
 
     <header class="hero">
       <div class="kicker">Legend Mastery Series • American Studies Bellringer Set A</div>
-      <h1 id="gameTitle">Game</h1>
-      <p id="gameSub" class="sub"></p>
-
+      <h1>Game 6 — Cold War & Civil Rights</h1>
+      <p class="sub">Containment, Korea, Vietnam, Civil Rights, Social Change</p>
       <div class="pills">
-        <span id="gameMeta" class="pill"></span>
-        <span class="pill">Auto-Submit</span>
+        <span class="pill">CS 22–27</span>
+        <span class="pill">9 Questions</span>
+        <span class="pill">Perfect Run Required</span>
+        <span class="pill">Auto-Submit on Click</span>
         <span class="pill">No Ticket Unless Perfect</span>
       </div>
     </header>
 
-    <main class="game-shell" style="margin-top: 20px;">
+    <main class="game-shell">
 
-      <section id="startPanel" class="start">
-        <h2>Name Entry Required</h2>
-        <p class="muted">
-          Enter your name, then complete all 9 questions. One miss means no ticket.
-          You must restart for a perfect run.
-        </p>
+      <section id="startScreen" class="screen active">
+        <div class="name-card">
+          <h2>Name Entry Required</h2>
+          <p class="muted">
+            Enter your first and last name, then complete all 9 questions.
+            One miss means no ticket. You must restart for a perfect run.
+          </p>
 
-        <input
-          id="studentName"
-          class="input"
-          placeholder="First and last name"
-          autocomplete="name"
-        />
-
-        <button id="startBtn">Start Game</button>
+          <div class="field-row">
+            <input id="studentName" type="text" placeholder="First and last name" autocomplete="off" />
+            <button class="btn" id="startBtn" type="button">Start Game</button>
+          </div>
+        </div>
       </section>
 
-      <section id="gamePanel" class="hide">
+      <section id="gameScreen" class="screen">
         <div class="hud">
-          <div>
-            <span class="label">Progress</span>
-            <b id="progress">1 / 9</b>
+          <div class="hud-box">
+            <div class="hud-label">Progress</div>
+            <div class="hud-value" id="progressText">1 / 9</div>
           </div>
-
-          <div>
-            <span class="label">Accuracy</span>
-            <b id="acc">100%</b>
+          <div class="hud-box">
+            <div class="hud-label">Accuracy</div>
+            <div class="hud-value" id="accuracyText">100%</div>
           </div>
-
-          <div>
-            <span class="label">Misses</span>
-            <b id="misses">0</b>
+          <div class="hud-box">
+            <div class="hud-label">Misses</div>
+            <div class="hud-value" id="missesText">0</div>
           </div>
-
-          <div>
-            <span class="label">Timer</span>
-            <b id="timer">0:00</b>
+          <div class="hud-box">
+            <div class="hud-label">Timer</div>
+            <div class="hud-value" id="timerText">0:00</div>
           </div>
         </div>
 
-        <p id="csLine" class="muted small"></p>
-        <div id="qText" class="question"></div>
-        <div id="choices" class="choices"></div>
-        <div id="feedback" class="feedback"></div>
-      </section>
-
-      <section id="finishPanel" class="hide">
-        <h2 id="finishTitle"></h2>
-        <p id="finishMsg" class="muted"></p>
-
-        <div id="ticket"></div>
-
-        <div class="btn-row">
-          <button id="resetBtn2">Hard Reset / Try Again</button>
-          <a class="btn secondary" href="../index.html">Back to Hub</a>
+        <div class="question-card">
+          <div class="question-meta" id="questionMeta"></div>
+          <h2 class="question" id="questionText"></h2>
+          <div class="choices" id="choices"></div>
+          <div class="feedback" id="feedback">
+            Select the best answer. The game auto-submits on click.
+          </div>
         </div>
       </section>
 
-      <div id="errorBox" class="errorbox hide"></div>
+      <section id="finishScreen" class="screen">
+        <div class="finish-card">
+          <h2 id="finishTitle">Finished</h2>
+          <p class="muted" id="finishSummary"></p>
+
+          <div id="ticketArea"></div>
+
+          <div class="btn-row">
+            <button class="btn danger" id="hardResetBottom" type="button">Hard Reset / Try Again</button>
+            <a class="btn secondary" href="../index.html">Back to Hub</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="error-box" id="errorBox"></div>
 
     </main>
 
-    <p class="footer small">
+    <p class="small-note">
       Correct answer required to advance • Hint on miss • Explanation shown after correct answer
     </p>
 
   </div>
 
-  <script>
-    /*
-      ============================================================
-      QUESTION BANK — EDIT HERE
-      ============================================================
+<script>
+/* =========================================================
+   QUESTION BANK — CLEAN / EDITABLE
+   Edit question, choices, answer, hint, and explanation here.
+========================================================= */
+const QUESTIONS = [
+  {
+    "id": "G6-Q1",
+    "cs": "CS 22",
+    "question": "Which U.S. policy provided economic aid to rebuild Europe after World War II?",
+    "choices": [
+      "Truman Doctrine",
+      "Marshall Plan",
+      "Lend-Lease Act",
+      "Kellogg-Briand Pact"
+    ],
+    "answer": "Marshall Plan",
+    "hint": "This plan focused on European recovery.",
+    "explanation": "The Marshall Plan rebuilt Western Europe and helped contain communism by strengthening democratic economies."
+  },
+  {
+    "id": "G6-Q2",
+    "cs": "CS 22",
+    "question": "What was the primary goal of containment?",
+    "choices": [
+      "Prevent the spread of communism",
+      "End all global trade",
+      "Expand U.S. colonies",
+      "Withdraw from alliances"
+    ],
+    "answer": "Prevent the spread of communism",
+    "hint": "Containment focused on stopping expansion.",
+    "explanation": "Containment guided U.S. foreign policy as the nation worked to block Soviet influence."
+  },
+  {
+    "id": "G6-Q3",
+    "cs": "CS 23",
+    "question": "Which factor contributed to suburban growth after World War II?",
+    "choices": [
+      "GI Bill home loan benefits",
+      "Decline in automobile ownership",
+      "Decreased infrastructure spending",
+      "End of consumer spending"
+    ],
+    "answer": "GI Bill home loan benefits",
+    "hint": "Veterans received help buying homes.",
+    "explanation": "GI Bill loans, automobiles, and highways helped fuel postwar suburbanization."
+  },
+  {
+    "id": "G6-Q4",
+    "cs": "CS 23",
+    "question": "What was one major effect of increased automobile ownership in the 1950s?",
+    "choices": [
+      "Expansion of highways and suburban commuting",
+      "Reduced suburban growth",
+      "Decline in consumer culture",
+      "End of shopping centers"
+    ],
+    "answer": "Expansion of highways and suburban commuting",
+    "hint": "Cars changed where people could live and work.",
+    "explanation": "Automobiles supported commuting, highway construction, suburban growth, and roadside commerce."
+  },
+  {
+    "id": "G6-Q5",
+    "cs": "CS 24",
+    "question": "What was the primary reason for U.S. involvement in the Korean War?",
+    "choices": [
+      "To contain the spread of communism",
+      "To expand U.S. territory",
+      "To remove European powers from Korea",
+      "To protect U.S. colonies"
+    ],
+    "answer": "To contain the spread of communism",
+    "hint": "Korea was an early Cold War conflict.",
+    "explanation": "The Korean War applied containment by resisting communist expansion in Asia."
+  },
+  {
+    "id": "G6-Q6",
+    "cs": "CS 24",
+    "question": "Which event led to increased U.S. military involvement in Vietnam?",
+    "choices": [
+      "Gulf of Tonkin Resolution",
+      "Cuban Missile Crisis",
+      "Fall of Saigon",
+      "Berlin Airlift"
+    ],
+    "answer": "Gulf of Tonkin Resolution",
+    "hint": "Congress gave the president broad military authority.",
+    "explanation": "The Gulf of Tonkin Resolution dramatically escalated U.S. involvement in Vietnam."
+  },
+  {
+    "id": "G6-Q7",
+    "cs": "CS 25",
+    "question": "Which strategy did the Civil Rights Movement use to challenge segregation?",
+    "choices": [
+      "Boycotts, sit-ins, and peaceful protests",
+      "Armed rebellion only",
+      "Government-imposed curfews",
+      "Military rule"
+    ],
+    "answer": "Boycotts, sit-ins, and peaceful protests",
+    "hint": "Civil rights leaders used nonviolent pressure.",
+    "explanation": "Nonviolent protest exposed injustice and built support for civil rights legislation."
+  },
+  {
+    "id": "G6-Q8",
+    "cs": "CS 25",
+    "question": "Which Supreme Court case overturned the 'separate but equal' doctrine?",
+    "choices": [
+      "Brown v. Board of Education",
+      "Plessy v. Ferguson",
+      "Miranda v. Arizona",
+      "Roe v. Wade"
+    ],
+    "answer": "Brown v. Board of Education",
+    "hint": "This case focused on segregated public schools.",
+    "explanation": "Brown ruled school segregation unconstitutional and helped energize the Civil Rights Movement."
+  },
+  {
+    "id": "G6-Q9",
+    "cs": "CS 26",
+    "question": "Which group worked to improve conditions for migrant farmworkers?",
+    "choices": [
+      "United Farm Workers",
+      "NAACP only",
+      "EPA",
+      "NATO"
+    ],
+    "answer": "United Farm Workers",
+    "hint": "Think C\u00e9sar Ch\u00e1vez and farm labor organizing.",
+    "explanation": "The United Farm Workers organized to improve wages and working conditions for migrant farmworkers."
+  }
+];
 
-      To edit a question:
-      1. Change the question text.
-      2. Change any choice text.
-      3. Set answer to "A", "B", "C", or "D".
-      4. Keep each game at 9 questions.
-      5. Hints should guide students without revealing the answer.
-      6. Explanations appear after a correct answer and linger about 5 seconds.
-    */
+/* =========================================================
+   GAME ENGINE — DO NOT EDIT UNLESS CHANGING BEHAVIOR
+========================================================= */
+const GAME_TITLE = "Game 6 — Cold War & Civil Rights";
+const STORAGE_KEY = "amstud-bellringer-set-a-game-6";
 
-    const GAME = {
-  "title": "Game 6 — Cold War & Social Change",
-  "subtitle": "Containment, Korea, Vietnam, Civil Rights, Great Society, Postwar Life",
-  "cs": "CS 22–27",
-  "key": "amstud_bellringer_set_a_game_6",
-  "questions": [
-    {
-      "id": "Q43",
-      "question": "Which factor MOST contributed to the rapid growth of suburbs after World War II?",
-      "choices": [
-        "Decline in automobile ownership",
-        "GI Bill home loan benefits",
-        "Increase in factory work inside cities",
-        "Decreased infrastructure spending"
-      ],
-      "answer": "B",
-      "explanation": "The GI Bill provided millions of veterans with low-interest home loans, making suburban housing affordable. Combined with expanding highways and automobile access, this fueled massive suburban growth during the postwar boom.",
-      "cs": "CS 23",
-      "efl": "Describe postwar prosperity and suburbanization",
-      "hint": "GI Bill home loans helped veterans buy suburban homes."
-    },
-    {
-      "id": "Q46",
-      "question": "Which U.S. policy provided economic aid to rebuild Europe after World War II?",
-      "choices": [
-        "Truman Doctrine",
-        "Marshall Plan",
-        "Lend-Lease Act",
-        "Kellogg-Briand Pact"
-      ],
-      "answer": "B",
-      "explanation": "The Marshall Plan offered billions of dollars to help Western European nations recover from wartime devastation. This strengthened democratic governments, prevented the spread of communism, and improved global economic stability.",
-      "cs": "CS 22",
-      "efl": "Explain early Cold War policy",
-      "hint": "The Marshall Plan rebuilt Western Europe to resist communism."
-    },
-    {
-      "id": "Q48",
-      "question": "What was the primary goal of the U.S. policy of containment?",
-      "choices": [
-        "Expand democracy worldwide",
-        "Prevent the spread of communism",
-        "Increase trade with China",
-        "End colonialism"
-      ],
-      "answer": "B",
-      "explanation": "Containment aimed to stop communism from expanding into new regions. The United States used economic aid, alliances, and sometimes military force to counter Soviet influence, shaping foreign policy throughout the Cold War.",
-      "cs": "CS 22",
-      "efl": "Explain containment",
-      "hint": "Containment was about stopping communism from spreading."
-    },
-    {
-      "id": "Q49",
-      "question": "What was the primary reason for U.S. involvement in the Korean War?",
-      "choices": [
-        "To expand U.S. territory in Asia",
-        "To contain the spread of communism",
-        "To protect American colonies",
-        "To remove European powers from Korea"
-      ],
-      "answer": "B",
-      "explanation": "U.S. leaders believed that stopping communist expansion in Korea was essential to containing Soviet influence during the Cold War. The Korean War became the first major military application of the containment doctrine, aimed at preventing further spread of communism in Asia.",
-      "cs": "CS 24",
-      "efl": "Explain U.S. involvement in Korea",
-      "hint": "Korea was a major test of containment in Asia."
-    },
-    {
-      "id": "Q50",
-      "question": "Which event led to increased U.S. military involvement in Vietnam?",
-      "choices": [
-        "Tet Offensive",
-        "Gulf of Tonkin Resolution",
-        "Cuban Missile Crisis",
-        "Fall of Saigon"
-      ],
-      "answer": "B",
-      "explanation": "After reports (later disputed) of North Vietnamese attacks on U.S. ships, Congress passed the Gulf of Tonkin Resolution, giving the president broad authority to use military force in Vietnam. This dramatically escalated U.S. involvement in the conflict.",
-      "cs": "CS 24",
-      "efl": "Explain Vietnam escalation",
-      "hint": "The Gulf of Tonkin Resolution expanded presidential war authority."
-    },
-    {
-      "id": "Q51",
-      "question": "What was one major effect of the Vietnam War on U.S. society?",
-      "choices": [
-        "Increased trust in government",
-        "Widespread antiwar protests and social divisions",
-        "Expansion of compulsory military service",
-        "Greater unity among political parties"
-      ],
-      "answer": "B",
-      "explanation": "Televised coverage and rising casualties fueled opposition to the war, leading to large-scale protests and deep political divisions. The conflict strained public confidence in government and shaped a generation’s views on foreign policy. WEDNESDAY (2 MCQs) Content: CS 25 — Civil Rights Movement + OST Recall",
-      "cs": "CS 24",
-      "efl": "Describe Vietnam’s effect on society",
-      "hint": "Vietnam divided the country and fueled protest."
-    },
-    {
-      "id": "Q52",
-      "question": "Which strategy did the Civil Rights Movement use to challenge segregation?",
-      "choices": [
-        "Armed rebellion",
-        "Boycotts, sit-ins, and peaceful protests",
-        "Government-imposed curfews",
-        "Military enforcement"
-      ],
-      "answer": "B",
-      "explanation": "Civil rights leaders like Martin Luther King Jr. promoted nonviolent resistance inspired by moral and constitutional principles. These peaceful tactics exposed injustice, mobilized national support, and pressured lawmakers to pass civil rights reforms.",
-      "cs": "CS 25",
-      "efl": "Describe Civil Rights Movement strategies",
-      "hint": "Nonviolent tactics included boycotts, sit-ins, and marches."
-    },
-    {
-      "id": "Q55",
-      "question": "What did the Civil Rights Act of 1964 accomplish?",
-      "choices": [
-        "Gave voting rights to women",
-        "Banned discrimination based on race, religion, or gender",
-        "Integrated Major League Baseball",
-        "Created Medicare"
-      ],
-      "answer": "B",
-      "explanation": "The Civil Rights Act outlawed discrimination in public accommodations, employment, and federally funded programs. It ended many legal forms of segregation and became one of the most influential laws in U.S. history for protecting civil rights.",
-      "cs": "CS 25",
-      "efl": "Explain civil rights legislation",
-      "hint": "The Civil Rights Act addressed segregation and discrimination."
-    },
-    {
-      "id": "Q70",
-      "question": "What was the major objective of the Great Society programs?",
-      "choices": [
-        "Increase military spending",
-        "Reduce poverty and racial injustice",
-        "Expand cold-weather agriculture",
-        "Promote isolationism"
-      ],
-      "answer": "B",
-      "explanation": "President Johnson’s Great Society initiatives targeted social inequality by expanding education, healthcare, and civil rights. The programs aimed to eliminate poverty and promote equal opportunity across the United States.",
-      "cs": "CS 26",
-      "efl": "Explain Great Society goals",
-      "hint": "The Great Society targeted poverty and inequality through federal programs."
-    }
-  ]
+let state = {
+  studentName: "",
+  index: 0,
+  misses: 0,
+  missedIds: [],
+  startedAt: null,
+  endedAt: null,
+  timerId: null
 };
 
-    /*
-      ============================================================
-      GAME ENGINE — DO NOT EDIT UNLESS CHANGING GAME BEHAVIOR
-      ============================================================
-    */
+const $ = (id) => document.getElementById(id);
 
-    const $ = (id) => document.getElementById(id);
+window.addEventListener("error", function(event) {
+  showError(event.message + "\\n" + event.filename + ":" + event.lineno);
+});
 
-    let order = [];
-    let idx = 0;
-    let misses = 0;
-    let attempts = 0;
-    let startMs = null;
-    let timer = null;
-    let student = "";
-    let locked = false;
+document.addEventListener("DOMContentLoaded", function() {
+  $("startBtn").addEventListener("click", startGame);
+  $("hardResetTop").addEventListener("click", hardReset);
+  $("hardResetBottom").addEventListener("click", hardReset);
 
-    function showError(message) {
-      $("errorBox").classList.remove("hide");
-      $("errorBox").textContent = message;
-    }
+  $("studentName").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") startGame();
+  });
 
-    window.addEventListener("error", (event) => {
-      showError("Game error: " + event.message);
+  loadSavedAttempt();
+});
+
+function showError(message) {
+  const box = $("errorBox");
+  box.style.display = "block";
+  box.textContent = "Error caught:\\n" + message;
+}
+
+function saveState() {
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+    studentName: state.studentName,
+    index: state.index,
+    misses: state.misses,
+    missedIds: state.missedIds,
+    startedAt: state.startedAt
+  }));
+}
+
+function loadSavedAttempt() {
+  const raw = sessionStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+
+  try {
+    const saved = JSON.parse(raw);
+    if (!saved || !saved.studentName) return;
+
+    state.studentName = saved.studentName;
+    state.index = saved.index || 0;
+    state.misses = saved.misses || 0;
+    state.missedIds = saved.missedIds || [];
+    state.startedAt = saved.startedAt || new Date().toISOString();
+
+    showScreen("gameScreen");
+    startTimer();
+    renderQuestion();
+  } catch (error) {
+    showError(error.message);
+  }
+}
+
+function startGame() {
+  const name = $("studentName").value.trim();
+
+  if (!name) {
+    alert("Enter your first and last name before starting.");
+    return;
+  }
+
+  state.studentName = name;
+  state.index = 0;
+  state.misses = 0;
+  state.missedIds = [];
+  state.startedAt = new Date().toISOString();
+  state.endedAt = null;
+
+  saveState();
+  showScreen("gameScreen");
+  startTimer();
+  renderQuestion();
+}
+
+function showScreen(screenId) {
+  document.querySelectorAll(".screen").forEach(function(screen) {
+    screen.classList.remove("active");
+  });
+  $(screenId).classList.add("active");
+}
+
+function startTimer() {
+  if (state.timerId) clearInterval(state.timerId);
+
+  state.timerId = setInterval(function() {
+    const elapsed = elapsedSeconds();
+    $("timerText").textContent = formatSeconds(elapsed);
+  }, 1000);
+}
+
+function elapsedSeconds() {
+  if (!state.startedAt) return 0;
+  return Math.max(0, Math.floor((Date.now() - new Date(state.startedAt).getTime()) / 1000));
+}
+
+function formatSeconds(totalSeconds) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return minutes + ":" + String(seconds).padStart(2, "0");
+}
+
+function formatClock(isoString) {
+  return new Date(isoString).toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit"
+  });
+}
+
+function formatDate(isoString) {
+  return new Date(isoString).toLocaleDateString();
+}
+
+function currentAccuracy() {
+  const uniqueMisses = new Set(state.missedIds).size;
+  const correctFirstTry = Math.max(0, QUESTIONS.length - uniqueMisses);
+  return Math.round((correctFirstTry / QUESTIONS.length) * 100);
+}
+
+function renderHud() {
+  $("progressText").textContent = Math.min(state.index + 1, QUESTIONS.length) + " / " + QUESTIONS.length;
+  $("accuracyText").textContent = currentAccuracy() + "%";
+  $("missesText").textContent = state.misses;
+  $("timerText").textContent = formatSeconds(elapsedSeconds());
+}
+
+function renderQuestion() {
+  if (state.index >= QUESTIONS.length) {
+    finishGame();
+    return;
+  }
+
+  renderHud();
+
+  const q = QUESTIONS[state.index];
+  $("questionMeta").textContent = q.id + " • " + q.cs;
+  $("questionText").textContent = q.question;
+  $("feedback").className = "feedback";
+  $("feedback").textContent = "Select the best answer. The game auto-submits on click.";
+
+  const choices = $("choices");
+  choices.innerHTML = "";
+
+  q.choices.forEach(function(choiceText) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "choice";
+    button.textContent = choiceText;
+    button.addEventListener("click", function() {
+      submitChoice(button, choiceText);
+    });
+    choices.appendChild(button);
+  });
+}
+
+function submitChoice(button, choiceText) {
+  const q = QUESTIONS[state.index];
+  const allChoices = Array.from(document.querySelectorAll(".choice"));
+
+  if (choiceText === q.answer) {
+    button.classList.add("correct");
+    allChoices.forEach(function(choice) {
+      choice.disabled = true;
     });
 
-    window.addEventListener("unhandledrejection", (event) => {
-      const reason = event.reason?.message || event.reason;
-      showError("Game promise error: " + reason);
-    });
+    $("feedback").className = "feedback good";
+    $("feedback").innerHTML = "<strong>Correct.</strong><br>" + q.explanation;
 
-    function pad(number) {
-      return String(number).padStart(2, "0");
+    setTimeout(function() {
+      state.index += 1;
+      saveState();
+      renderQuestion();
+    }, 5000);
+
+  } else {
+    button.classList.add("incorrect");
+    button.disabled = true;
+
+    state.misses += 1;
+    if (!state.missedIds.includes(q.id)) {
+      state.missedIds.push(q.id);
     }
 
-    function timeStr(date) {
-      return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-    }
+    saveState();
+    renderHud();
 
-    function elapsed() {
-      const seconds = Math.floor((Date.now() - startMs) / 1000);
-      return `${Math.floor(seconds / 60)}:${pad(seconds % 60)}`;
-    }
+    $("feedback").className = "feedback warn";
+    $("feedback").innerHTML = "<strong>Hint:</strong> " + q.hint + "<br><br>Choose again. Correct answer required to advance.";
+  }
+}
 
-    function accuracy() {
-      if (!attempts) return 100;
-      return Math.round(((attempts - misses) / attempts) * 100);
-    }
+function finishGame() {
+  if (state.timerId) clearInterval(state.timerId);
 
-    function hardReset() {
-      try {
-        sessionStorage.removeItem(GAME.key);
-        localStorage.removeItem(GAME.key);
-      } catch (error) {
-        console.warn("Storage clear skipped:", error);
-      }
+  state.endedAt = new Date().toISOString();
 
-      location.reload();
-    }
+  showScreen("finishScreen");
 
-    function startGame() {
-      student = $("studentName").value.trim();
+  const elapsed = formatSeconds(Math.floor((new Date(state.endedAt).getTime() - new Date(state.startedAt).getTime()) / 1000));
+  const accuracy = currentAccuracy();
 
-      if (!student) {
-        showError("Enter your name to begin.");
-        return;
-      }
+  $("finishSummary").textContent = "Name: " + state.studentName + " • Accuracy: " + accuracy + "% • Misses: " + state.misses + " • Runtime: " + elapsed;
 
-      $("startPanel").classList.add("hide");
-      $("gamePanel").classList.remove("hide");
+  const ticketArea = $("ticketArea");
+  ticketArea.innerHTML = "";
 
-      startMs = Date.now();
-      order = GAME.questions.map((_, index) => index);
-      idx = 0;
-      misses = 0;
-      attempts = 0;
+  if (state.misses === 0) {
+    $("finishTitle").textContent = "Perfect Run Complete";
 
-      timer = setInterval(updateHud, 500);
-
-      render();
-    }
-
-    function updateHud() {
-      $("progress").textContent = `${Math.min(idx + 1, GAME.questions.length)} / ${GAME.questions.length}`;
-      $("acc").textContent = accuracy() + "%";
-      $("misses").textContent = misses;
-      $("timer").textContent = startMs ? elapsed() : "0:00";
-    }
-
-    function render() {
-      locked = false;
-      updateHud();
-
-      const question = GAME.questions[order[idx]];
-
-      $("qText").textContent = question.question;
-      $("csLine").textContent = question.cs + " • " + question.efl;
-      $("feedback").innerHTML =
-        "Choose the best answer. Incorrect choices give a hint but do not reveal the answer.";
-
-      const choicesBox = $("choices");
-      choicesBox.innerHTML = "";
-
-      const letters = ["A", "B", "C", "D"];
-
-      question.choices.forEach((choiceText, index) => {
-        const button = document.createElement("button");
-        button.className = "choice";
-        button.innerHTML = `<b>${letters[index]}.</b> ${choiceText}`;
-        button.onclick = () => choose(index, button);
-        choicesBox.appendChild(button);
-      });
-    }
-
-    function choose(index, button) {
-      if (locked) return;
-
-      const question = GAME.questions[order[idx]];
-      const chosen = "ABCD"[index];
-
-      attempts++;
-
-      if (chosen === question.answer) {
-        locked = true;
-        button.classList.add("correct");
-
-        $("feedback").innerHTML = "<b>Correct.</b><br>" + question.explanation;
-
-        updateHud();
-
-        setTimeout(() => {
-          idx++;
-
-          if (idx >= GAME.questions.length) {
-            finish();
-          } else {
-            render();
-          }
-        }, 5000);
-
-      } else {
-        misses++;
-        button.classList.add("incorrect");
-        button.disabled = true;
-
-        $("feedback").innerHTML = "<b>Not yet.</b> Hint: " + question.hint;
-
-        updateHud();
-      }
-    }
-
-    function finish() {
-      clearInterval(timer);
-
-      $("gamePanel").classList.add("hide");
-      $("finishPanel").classList.remove("hide");
-
-      const end = new Date();
-      const perfectRun = misses === 0;
-
-      $("finishTitle").textContent = perfectRun
-        ? "Perfect Run — Submit Ticket"
-        : "Mastery required — restart";
-
-      $("finishMsg").textContent = perfectRun
-        ? "Show this ticket to your teacher."
-        : "No ticket generated. Restart and complete a perfect run.";
-
-      const ticket = $("ticket");
-      ticket.className = perfectRun ? "ticket" : "ticket danger";
-
-      if (perfectRun) {
-        ticket.innerHTML = `
-          <h2>Submit Ticket</h2>
-
-          <div class="ticket-grid">
-            <div>
-              <span class="label">Student</span>
-              <b>${student}</b>
-            </div>
-
-            <div>
-              <span class="label">Date</span>
-              <b>${end.toLocaleDateString()}</b>
-            </div>
-
-            <div>
-              <span class="label">Start Time</span>
-              <b>${timeStr(new Date(startMs))}</b>
-            </div>
-
-            <div>
-              <span class="label">End Time</span>
-              <b>${timeStr(end)}</b>
-            </div>
-
-            <div>
-              <span class="label">Runtime</span>
-              <b>${elapsed()}</b>
-            </div>
-
-            <div>
-              <span class="label">Accuracy</span>
-              <b>${accuracy()}%</b>
-            </div>
-
-            <div>
-              <span class="label">Misses</span>
-              <b>${misses}</b>
-            </div>
-
-            <div>
-              <span class="label">Result</span>
-              <b>Perfect Run</b>
-            </div>
+    ticketArea.innerHTML = `
+      <div class="ticket">
+        <h3>Submit Ticket — Perfect Run</h3>
+        <div class="ticket-grid">
+          <div class="ticket-item">
+            <div class="ticket-label">Student Name</div>
+            <div class="ticket-value">${escapeHtml(state.studentName)}</div>
           </div>
-        `;
-      } else {
-        ticket.innerHTML = `
-          <h2>Mastery required — restart</h2>
-          <p>You must finish with 0 misses to generate a submit ticket.</p>
-        `;
-      }
-    }
+          <div class="ticket-item">
+            <div class="ticket-label">Date</div>
+            <div class="ticket-value">${formatDate(state.endedAt)}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Start Time</div>
+            <div class="ticket-value">${formatClock(state.startedAt)}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">End Time</div>
+            <div class="ticket-value">${formatClock(state.endedAt)}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Runtime</div>
+            <div class="ticket-value">${elapsed}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Accuracy</div>
+            <div class="ticket-value">${accuracy}%</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Misses</div>
+            <div class="ticket-value">${state.misses}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Result</div>
+            <div class="ticket-value">Perfect Run</div>
+          </div>
+        </div>
+      </div>
+    `;
+  } else {
+    $("finishTitle").textContent = "Mastery Required";
+    ticketArea.innerHTML = `
+      <div class="mastery-message">
+        Mastery required — restart
+      </div>
+    `;
+  }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      $("gameTitle").textContent = GAME.title;
-      $("gameSub").textContent = GAME.subtitle;
-      $("gameMeta").textContent = GAME.cs + " • 9 Questions • Perfect Run Required";
+  sessionStorage.removeItem(STORAGE_KEY);
+}
 
-      $("startBtn").onclick = startGame;
-      $("resetBtn").onclick = hardReset;
-      $("resetBtn2").onclick = hardReset;
-    });
-  </script>
+function hardReset() {
+  sessionStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+</script>
 </body>
 </html>
