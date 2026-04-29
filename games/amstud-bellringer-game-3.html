@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Game 3 — Civil War & Reconstruction</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Game 3 — Civil War & Reconstruction — Legend Mastery Series</title>
   <link rel="stylesheet" href="../styles.css" />
 </head>
 
@@ -12,484 +12,518 @@
 
     <div class="topbar">
       <a class="btn secondary" href="../index.html">← Back to Hub</a>
-      <button id="resetBtn" class="secondary">Hard Reset</button>
+      <button class="btn danger" id="hardResetTop" type="button">Hard Reset</button>
     </div>
 
     <header class="hero">
       <div class="kicker">Legend Mastery Series • American Studies Bellringer Set A</div>
-      <h1 id="gameTitle">Game</h1>
-      <p id="gameSub" class="sub"></p>
-
+      <h1>Game 3 — Civil War & Reconstruction</h1>
+      <p class="sub">Sectional Conflict, Turning Points, Reconstruction, Post-Reconstruction Racism</p>
       <div class="pills">
-        <span id="gameMeta" class="pill"></span>
-        <span class="pill">Auto-Submit</span>
+        <span class="pill">Civil War + CS 12</span>
+        <span class="pill">9 Questions</span>
+        <span class="pill">Perfect Run Required</span>
+        <span class="pill">Auto-Submit on Click</span>
         <span class="pill">No Ticket Unless Perfect</span>
       </div>
     </header>
 
-    <main class="game-shell" style="margin-top: 20px;">
+    <main class="game-shell">
 
-      <section id="startPanel" class="start">
-        <h2>Name Entry Required</h2>
-        <p class="muted">
-          Enter your name, then complete all 9 questions. One miss means no ticket.
-          You must restart for a perfect run.
-        </p>
+      <section id="startScreen" class="screen active">
+        <div class="name-card">
+          <h2>Name Entry Required</h2>
+          <p class="muted">
+            Enter your first and last name, then complete all 9 questions.
+            One miss means no ticket. You must restart for a perfect run.
+          </p>
 
-        <input
-          id="studentName"
-          class="input"
-          placeholder="First and last name"
-          autocomplete="name"
-        />
-
-        <button id="startBtn">Start Game</button>
+          <div class="field-row">
+            <input id="studentName" type="text" placeholder="First and last name" autocomplete="off" />
+            <button class="btn" id="startBtn" type="button">Start Game</button>
+          </div>
+        </div>
       </section>
 
-      <section id="gamePanel" class="hide">
+      <section id="gameScreen" class="screen">
         <div class="hud">
-          <div>
-            <span class="label">Progress</span>
-            <b id="progress">1 / 9</b>
+          <div class="hud-box">
+            <div class="hud-label">Progress</div>
+            <div class="hud-value" id="progressText">1 / 9</div>
           </div>
-
-          <div>
-            <span class="label">Accuracy</span>
-            <b id="acc">100%</b>
+          <div class="hud-box">
+            <div class="hud-label">Accuracy</div>
+            <div class="hud-value" id="accuracyText">100%</div>
           </div>
-
-          <div>
-            <span class="label">Misses</span>
-            <b id="misses">0</b>
+          <div class="hud-box">
+            <div class="hud-label">Misses</div>
+            <div class="hud-value" id="missesText">0</div>
           </div>
-
-          <div>
-            <span class="label">Timer</span>
-            <b id="timer">0:00</b>
+          <div class="hud-box">
+            <div class="hud-label">Timer</div>
+            <div class="hud-value" id="timerText">0:00</div>
           </div>
         </div>
 
-        <p id="csLine" class="muted small"></p>
-        <div id="qText" class="question"></div>
-        <div id="choices" class="choices"></div>
-        <div id="feedback" class="feedback"></div>
-      </section>
-
-      <section id="finishPanel" class="hide">
-        <h2 id="finishTitle"></h2>
-        <p id="finishMsg" class="muted"></p>
-
-        <div id="ticket"></div>
-
-        <div class="btn-row">
-          <button id="resetBtn2">Hard Reset / Try Again</button>
-          <a class="btn secondary" href="../index.html">Back to Hub</a>
+        <div class="question-card">
+          <div class="question-meta" id="questionMeta"></div>
+          <h2 class="question" id="questionText"></h2>
+          <div class="choices" id="choices"></div>
+          <div class="feedback" id="feedback">
+            Select the best answer. The game auto-submits on click.
+          </div>
         </div>
       </section>
 
-      <div id="errorBox" class="errorbox hide"></div>
+      <section id="finishScreen" class="screen">
+        <div class="finish-card">
+          <h2 id="finishTitle">Finished</h2>
+          <p class="muted" id="finishSummary"></p>
+
+          <div id="ticketArea"></div>
+
+          <div class="btn-row">
+            <button class="btn danger" id="hardResetBottom" type="button">Hard Reset / Try Again</button>
+            <a class="btn secondary" href="../index.html">Back to Hub</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="error-box" id="errorBox"></div>
 
     </main>
 
-    <p class="footer small">
+    <p class="small-note">
       Correct answer required to advance • Hint on miss • Explanation shown after correct answer
     </p>
 
   </div>
 
-  <script>
-    /*
-      ============================================================
-      QUESTION BANK — EDIT HERE
-      ============================================================
+<script>
+/* =========================================================
+   QUESTION BANK — CLEAN / EDITABLE
+   Edit question, choices, answer, hint, and explanation here.
+========================================================= */
+const QUESTIONS = [
+  {
+    "id": "G3-Q1",
+    "cs": "Civil War Review",
+    "question": "What was one major economic difference between the North and South before the Civil War?",
+    "choices": [
+      "The North depended heavily on plantation agriculture",
+      "The South relied mainly on factories",
+      "The North had more industry and the South depended on agriculture",
+      "The South produced more manufactured goods"
+    ],
+    "answer": "The North had more industry and the South depended on agriculture",
+    "hint": "Compare factories and plantations.",
+    "explanation": "The North\u2019s industrial economy and the South\u2019s plantation economy contributed to sectional conflict."
+  },
+  {
+    "id": "G3-Q2",
+    "cs": "Civil War Review",
+    "question": "How did the Dred Scott decision increase sectional tensions?",
+    "choices": [
+      "It legalized secession",
+      "It ruled that Congress could not prohibit slavery in the territories",
+      "It ended the Fugitive Slave Act",
+      "It abolished slavery in the North"
+    ],
+    "answer": "It ruled that Congress could not prohibit slavery in the territories",
+    "hint": "The decision dealt with slavery in territories.",
+    "explanation": "The decision angered many northerners because it strengthened pro-slavery claims and undermined compromise over western territories."
+  },
+  {
+    "id": "G3-Q3",
+    "cs": "Civil War Review",
+    "question": "What was the immediate result of Abraham Lincoln\u2019s election in 1860?",
+    "choices": [
+      "Congress abolished slavery",
+      "Southern states began to secede",
+      "The Supreme Court overturned the election",
+      "The Civil War ended"
+    ],
+    "answer": "Southern states began to secede",
+    "hint": "Think about South Carolina and the Confederacy.",
+    "explanation": "Lincoln\u2019s election triggered secession by southern states, leading to the formation of the Confederacy."
+  },
+  {
+    "id": "G3-Q4",
+    "cs": "Civil War Review",
+    "question": "What was a major advantage the North held at the start of the Civil War?",
+    "choices": [
+      "More industrial capacity and rail networks",
+      "Stronger support from Britain",
+      "More plantations",
+      "A smaller population to supply"
+    ],
+    "answer": "More industrial capacity and rail networks",
+    "hint": "War requires production and transportation.",
+    "explanation": "Northern factories, railroads, and financial resources helped the Union sustain the war effort."
+  },
+  {
+    "id": "G3-Q5",
+    "cs": "Civil War Review",
+    "question": "What was a major effect of the Emancipation Proclamation?",
+    "choices": [
+      "It immediately ended slavery everywhere",
+      "It changed the focus of the war to include ending slavery",
+      "It returned escaped enslaved people to owners",
+      "It encouraged Europe to join the Confederacy"
+    ],
+    "answer": "It changed the focus of the war to include ending slavery",
+    "hint": "It did not end slavery everywhere immediately.",
+    "explanation": "The proclamation shifted the war\u2019s meaning toward freedom and weakened Confederate hopes for foreign support."
+  },
+  {
+    "id": "G3-Q6",
+    "cs": "Civil War Review",
+    "question": "Why was Gettysburg considered a turning point?",
+    "choices": [
+      "It halted Confederate advances into the North",
+      "It was the first battle of the war",
+      "It forced Britain to join the war",
+      "It captured Washington, D.C."
+    ],
+    "answer": "It halted Confederate advances into the North",
+    "hint": "Think about Lee\u2019s invasion of northern territory.",
+    "explanation": "Gettysburg stopped Lee\u2019s northern invasion and boosted Union morale."
+  },
+  {
+    "id": "G3-Q7",
+    "cs": "CS 12",
+    "question": "What was the major purpose of the 13th Amendment?",
+    "choices": [
+      "Grant voting rights to women",
+      "Abolish slavery throughout the United States",
+      "Provide citizenship to immigrants",
+      "Create new western territories"
+    ],
+    "answer": "Abolish slavery throughout the United States",
+    "hint": "This was the first Reconstruction Amendment.",
+    "explanation": "The 13th Amendment permanently abolished slavery in the United States."
+  },
+  {
+    "id": "G3-Q8",
+    "cs": "CS 12",
+    "question": "What did the 14th Amendment guarantee?",
+    "choices": [
+      "Equal pay for all citizens",
+      "Citizenship and equal protection under the law",
+      "The abolition of poll taxes",
+      "The direct election of senators"
+    ],
+    "answer": "Citizenship and equal protection under the law",
+    "hint": "This amendment became central to civil rights law.",
+    "explanation": "The 14th Amendment established citizenship, due process, and equal protection protections."
+  },
+  {
+    "id": "G3-Q9",
+    "cs": "CS 12",
+    "question": "What was one effect of the Compromise of 1877?",
+    "choices": [
+      "Federal troops withdrew from the South",
+      "Reconstruction expanded",
+      "African Americans gained new protections immediately",
+      "The Ku Klux Klan disbanded"
+    ],
+    "answer": "Federal troops withdrew from the South",
+    "hint": "This compromise helped end Reconstruction.",
+    "explanation": "The withdrawal of federal troops allowed white southern governments to restore discriminatory systems."
+  }
+];
 
-      To edit a question:
-      1. Change the question text.
-      2. Change any choice text.
-      3. Set answer to "A", "B", "C", or "D".
-      4. Keep each game at 9 questions.
-      5. Hints should guide students without revealing the answer.
-      6. Explanations appear after a correct answer and linger about 5 seconds.
-    */
+/* =========================================================
+   GAME ENGINE — DO NOT EDIT UNLESS CHANGING BEHAVIOR
+========================================================= */
+const GAME_TITLE = "Game 3 — Civil War & Reconstruction";
+const STORAGE_KEY = "amstud-bellringer-set-a-game-3";
 
-    const GAME = {
-  "title": "Game 3 — Civil War & Reconstruction",
-  "subtitle": "Sectional Conflict, War Turning Points, Reconstruction Amendments, Post-Reconstruction",
-  "cs": "CS 12 plus Civil War review",
-  "key": "amstud_bellringer_set_a_game_3",
-  "questions": [
-    {
-      "id": "Q25",
-      "question": "What was one major economic difference between the North and the South before the Civil War?",
-      "choices": [
-        "The North depended heavily on plantation agriculture",
-        "The South relied on factories and industrial production",
-        "The North had more industry and the South depended on agriculture",
-        "The South produced more manufactured goods than the North"
-      ],
-      "answer": "C",
-      "explanation": "The North had a diversified industrial economy with factories, railroads, and finance, while the South relied mostly on plantation agriculture and enslaved labor. These opposing economic systems fueled political tensions and shaped disagreements over tariffs and slavery.",
-      "cs": "Civil War Review",
-      "efl": "Explain sectional economic differences",
-      "hint": "Compare the industrial North with the agricultural slave-based South."
-    },
-    {
-      "id": "Q26",
-      "question": "How did the Dred Scott decision increase sectional tensions?",
-      "choices": [
-        "It legalized secession",
-        "It permitted northern states to ban slavery",
-        "It ruled that Congress could not prohibit slavery in the territories",
-        "It ended the Fugitive Slave Act"
-      ],
-      "answer": "C",
-      "explanation": "By declaring that Congress lacked authority to restrict slavery in western territories, the Supreme Court overturned decades of compromise. This ruling angered northerners, strengthened pro-slavery arguments in the South, and pushed the nation toward conflict.",
-      "cs": "Civil War Review",
-      "efl": "Explain how slavery in the territories increased tensions",
-      "hint": "Dred Scott strengthened pro-slavery claims about the territories."
-    },
-    {
-      "id": "Q27",
-      "question": "What was the immediate result of Abraham Lincoln’s election in 1860?",
-      "choices": [
-        "Congress abolished slavery",
-        "Southern states began to secede",
-        "The Supreme Court overturned the election",
-        "The Civil War ended"
-      ],
-      "answer": "B",
-      "explanation": "Southern states feared Lincoln would stop the expansion of slavery despite his moderate stance. His election triggered secession beginning with South Carolina, leading directly to the formation of the Confederacy and the outbreak of the Civil War. WEDNESDAY (2 MCQs) Content: CS 11 + OST Recall",
-      "cs": "Civil War Review",
-      "efl": "Explain secession after Lincoln’s election",
-      "hint": "Southern states feared limits on slavery’s expansion."
-    },
-    {
-      "id": "Q29",
-      "question": "What was a major effect of the Emancipation Proclamation?",
-      "choices": [
-        "It immediately ended slavery everywhere",
-        "It encouraged European nations to support the Confederacy",
-        "It changed the focus of the war to ending slavery",
-        "It returned escaped enslaved people to their owners"
-      ],
-      "answer": "C",
-      "explanation": "Although limited in scope, the proclamation redefined the Civil War as a fight for freedom, not just union. This moral shift discouraged foreign support for the Confederacy and allowed Black soldiers to join the Union Army. FRIDAY (1 MCQ) Content: CS 11 — Civil War Turning Points",
-      "cs": "Civil War Review",
-      "efl": "Explain the effect of the Emancipation Proclamation",
-      "hint": "The war’s purpose shifted from only preserving the Union toward freedom."
-    },
-    {
-      "id": "Q30",
-      "question": "Why was the Battle of Gettysburg considered a turning point?",
-      "choices": [
-        "It led to the capture of Washington, D.C.",
-        "It was the final battle of the war",
-        "It halted Confederate advances into the North",
-        "It forced Britain to join the war"
-      ],
-      "answer": "C",
-      "explanation": "Gettysburg crushed Lee’s hopes of invading northern territory and gaining foreign recognition. The Union victory boosted Northern morale and marked the beginning of a strategic shift that ultimately weakened the Confederacy.",
-      "cs": "Civil War Review",
-      "efl": "Identify major Civil War turning points",
-      "hint": "Gettysburg stopped Lee’s invasion of the North."
-    },
-    {
-      "id": "Q31",
-      "question": "What was a major purpose of the 13th Amendment?",
-      "choices": [
-        "Grant voting rights to women",
-        "Abolish slavery throughout the United States",
-        "Provide citizenship to immigrants",
-        "Create new western territories"
-      ],
-      "answer": "B",
-      "explanation": "The 13th Amendment permanently abolished slavery nationwide, transforming the social and economic structure of the South. It marked the first major constitutional change after the Civil War and laid the foundation for subsequent civil rights protections.",
-      "cs": "CS 12",
-      "efl": "Describe post-Reconstruction constitutional context",
-      "hint": "The 13th Amendment ended slavery nationally."
-    },
-    {
-      "id": "Q32",
-      "question": "What did the 14th Amendment guarantee?",
-      "choices": [
-        "Equal pay for all citizens",
-        "The right to bear arms",
-        "Citizenship and equal protection under the law",
-        "The abolition of poll taxes"
-      ],
-      "answer": "C",
-      "explanation": "The 14th Amendment established birthright citizenship and required states to provide due process and equal protection. This amendment became a cornerstone of civil rights law, shaping court decisions for more than a century.",
-      "cs": "CS 12",
-      "efl": "Describe civil rights protections after Reconstruction",
-      "hint": "The 14th Amendment is tied to citizenship, due process, and equal protection."
-    },
-    {
-      "id": "Q34",
-      "question": "What was the purpose of Black Codes in the South?",
-      "choices": [
-        "Grant land to newly freed people",
-        "Protect the civil rights of African Americans",
-        "Restrict the freedoms of newly emancipated individuals",
-        "Encourage Black political participation"
-      ],
-      "answer": "C",
-      "explanation": "Southern legislatures created Black Codes to limit the economic and social freedoms of African Americans after the Civil War. These laws attempted to maintain white control and reestablish conditions similar to slavery, prompting Congressional Reconstruction.",
-      "cs": "CS 12",
-      "efl": "Describe institutionalized racist practices",
-      "hint": "Black Codes restricted freedom after emancipation."
-    },
-    {
-      "id": "Q35",
-      "question": "What was one effect of the Compromise of 1877?",
-      "choices": [
-        "Federal troops withdrew from the South",
-        "Reconstruction expanded",
-        "African Americans gained new voting protections",
-        "The Ku Klux Klan disbanded"
-      ],
-      "answer": "A",
-      "explanation": "The disputed 1876 election was resolved through a compromise that removed federal troops from the South. Their withdrawal allowed white supremacist groups and discriminatory laws to regain control, effectively ending Reconstruction and rolling back civil rights gains. FRIDAY (1 MCQ) Content: CS 12 — Reconstruction Outcomes",
-      "cs": "CS 12",
-      "efl": "Analyze the end of Reconstruction",
-      "hint": "Federal troop withdrawal weakened protection for Reconstruction reforms."
-    }
-  ]
+let state = {
+  studentName: "",
+  index: 0,
+  misses: 0,
+  missedIds: [],
+  startedAt: null,
+  endedAt: null,
+  timerId: null
 };
 
-    /*
-      ============================================================
-      GAME ENGINE — DO NOT EDIT UNLESS CHANGING GAME BEHAVIOR
-      ============================================================
-    */
+const $ = (id) => document.getElementById(id);
 
-    const $ = (id) => document.getElementById(id);
+window.addEventListener("error", function(event) {
+  showError(event.message + "\\n" + event.filename + ":" + event.lineno);
+});
 
-    let order = [];
-    let idx = 0;
-    let misses = 0;
-    let attempts = 0;
-    let startMs = null;
-    let timer = null;
-    let student = "";
-    let locked = false;
+document.addEventListener("DOMContentLoaded", function() {
+  $("startBtn").addEventListener("click", startGame);
+  $("hardResetTop").addEventListener("click", hardReset);
+  $("hardResetBottom").addEventListener("click", hardReset);
 
-    function showError(message) {
-      $("errorBox").classList.remove("hide");
-      $("errorBox").textContent = message;
-    }
+  $("studentName").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") startGame();
+  });
 
-    window.addEventListener("error", (event) => {
-      showError("Game error: " + event.message);
+  loadSavedAttempt();
+});
+
+function showError(message) {
+  const box = $("errorBox");
+  box.style.display = "block";
+  box.textContent = "Error caught:\\n" + message;
+}
+
+function saveState() {
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+    studentName: state.studentName,
+    index: state.index,
+    misses: state.misses,
+    missedIds: state.missedIds,
+    startedAt: state.startedAt
+  }));
+}
+
+function loadSavedAttempt() {
+  const raw = sessionStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+
+  try {
+    const saved = JSON.parse(raw);
+    if (!saved || !saved.studentName) return;
+
+    state.studentName = saved.studentName;
+    state.index = saved.index || 0;
+    state.misses = saved.misses || 0;
+    state.missedIds = saved.missedIds || [];
+    state.startedAt = saved.startedAt || new Date().toISOString();
+
+    showScreen("gameScreen");
+    startTimer();
+    renderQuestion();
+  } catch (error) {
+    showError(error.message);
+  }
+}
+
+function startGame() {
+  const name = $("studentName").value.trim();
+
+  if (!name) {
+    alert("Enter your first and last name before starting.");
+    return;
+  }
+
+  state.studentName = name;
+  state.index = 0;
+  state.misses = 0;
+  state.missedIds = [];
+  state.startedAt = new Date().toISOString();
+  state.endedAt = null;
+
+  saveState();
+  showScreen("gameScreen");
+  startTimer();
+  renderQuestion();
+}
+
+function showScreen(screenId) {
+  document.querySelectorAll(".screen").forEach(function(screen) {
+    screen.classList.remove("active");
+  });
+  $(screenId).classList.add("active");
+}
+
+function startTimer() {
+  if (state.timerId) clearInterval(state.timerId);
+
+  state.timerId = setInterval(function() {
+    const elapsed = elapsedSeconds();
+    $("timerText").textContent = formatSeconds(elapsed);
+  }, 1000);
+}
+
+function elapsedSeconds() {
+  if (!state.startedAt) return 0;
+  return Math.max(0, Math.floor((Date.now() - new Date(state.startedAt).getTime()) / 1000));
+}
+
+function formatSeconds(totalSeconds) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return minutes + ":" + String(seconds).padStart(2, "0");
+}
+
+function formatClock(isoString) {
+  return new Date(isoString).toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit"
+  });
+}
+
+function formatDate(isoString) {
+  return new Date(isoString).toLocaleDateString();
+}
+
+function currentAccuracy() {
+  const uniqueMisses = new Set(state.missedIds).size;
+  const correctFirstTry = Math.max(0, QUESTIONS.length - uniqueMisses);
+  return Math.round((correctFirstTry / QUESTIONS.length) * 100);
+}
+
+function renderHud() {
+  $("progressText").textContent = Math.min(state.index + 1, QUESTIONS.length) + " / " + QUESTIONS.length;
+  $("accuracyText").textContent = currentAccuracy() + "%";
+  $("missesText").textContent = state.misses;
+  $("timerText").textContent = formatSeconds(elapsedSeconds());
+}
+
+function renderQuestion() {
+  if (state.index >= QUESTIONS.length) {
+    finishGame();
+    return;
+  }
+
+  renderHud();
+
+  const q = QUESTIONS[state.index];
+  $("questionMeta").textContent = q.id + " • " + q.cs;
+  $("questionText").textContent = q.question;
+  $("feedback").className = "feedback";
+  $("feedback").textContent = "Select the best answer. The game auto-submits on click.";
+
+  const choices = $("choices");
+  choices.innerHTML = "";
+
+  q.choices.forEach(function(choiceText) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "choice";
+    button.textContent = choiceText;
+    button.addEventListener("click", function() {
+      submitChoice(button, choiceText);
+    });
+    choices.appendChild(button);
+  });
+}
+
+function submitChoice(button, choiceText) {
+  const q = QUESTIONS[state.index];
+  const allChoices = Array.from(document.querySelectorAll(".choice"));
+
+  if (choiceText === q.answer) {
+    button.classList.add("correct");
+    allChoices.forEach(function(choice) {
+      choice.disabled = true;
     });
 
-    window.addEventListener("unhandledrejection", (event) => {
-      const reason = event.reason?.message || event.reason;
-      showError("Game promise error: " + reason);
-    });
+    $("feedback").className = "feedback good";
+    $("feedback").innerHTML = "<strong>Correct.</strong><br>" + q.explanation;
 
-    function pad(number) {
-      return String(number).padStart(2, "0");
+    setTimeout(function() {
+      state.index += 1;
+      saveState();
+      renderQuestion();
+    }, 5000);
+
+  } else {
+    button.classList.add("incorrect");
+    button.disabled = true;
+
+    state.misses += 1;
+    if (!state.missedIds.includes(q.id)) {
+      state.missedIds.push(q.id);
     }
 
-    function timeStr(date) {
-      return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-    }
+    saveState();
+    renderHud();
 
-    function elapsed() {
-      const seconds = Math.floor((Date.now() - startMs) / 1000);
-      return `${Math.floor(seconds / 60)}:${pad(seconds % 60)}`;
-    }
+    $("feedback").className = "feedback warn";
+    $("feedback").innerHTML = "<strong>Hint:</strong> " + q.hint + "<br><br>Choose again. Correct answer required to advance.";
+  }
+}
 
-    function accuracy() {
-      if (!attempts) return 100;
-      return Math.round(((attempts - misses) / attempts) * 100);
-    }
+function finishGame() {
+  if (state.timerId) clearInterval(state.timerId);
 
-    function hardReset() {
-      try {
-        sessionStorage.removeItem(GAME.key);
-        localStorage.removeItem(GAME.key);
-      } catch (error) {
-        console.warn("Storage clear skipped:", error);
-      }
+  state.endedAt = new Date().toISOString();
 
-      location.reload();
-    }
+  showScreen("finishScreen");
 
-    function startGame() {
-      student = $("studentName").value.trim();
+  const elapsed = formatSeconds(Math.floor((new Date(state.endedAt).getTime() - new Date(state.startedAt).getTime()) / 1000));
+  const accuracy = currentAccuracy();
 
-      if (!student) {
-        showError("Enter your name to begin.");
-        return;
-      }
+  $("finishSummary").textContent = "Name: " + state.studentName + " • Accuracy: " + accuracy + "% • Misses: " + state.misses + " • Runtime: " + elapsed;
 
-      $("startPanel").classList.add("hide");
-      $("gamePanel").classList.remove("hide");
+  const ticketArea = $("ticketArea");
+  ticketArea.innerHTML = "";
 
-      startMs = Date.now();
-      order = GAME.questions.map((_, index) => index);
-      idx = 0;
-      misses = 0;
-      attempts = 0;
+  if (state.misses === 0) {
+    $("finishTitle").textContent = "Perfect Run Complete";
 
-      timer = setInterval(updateHud, 500);
-
-      render();
-    }
-
-    function updateHud() {
-      $("progress").textContent = `${Math.min(idx + 1, GAME.questions.length)} / ${GAME.questions.length}`;
-      $("acc").textContent = accuracy() + "%";
-      $("misses").textContent = misses;
-      $("timer").textContent = startMs ? elapsed() : "0:00";
-    }
-
-    function render() {
-      locked = false;
-      updateHud();
-
-      const question = GAME.questions[order[idx]];
-
-      $("qText").textContent = question.question;
-      $("csLine").textContent = question.cs + " • " + question.efl;
-      $("feedback").innerHTML =
-        "Choose the best answer. Incorrect choices give a hint but do not reveal the answer.";
-
-      const choicesBox = $("choices");
-      choicesBox.innerHTML = "";
-
-      const letters = ["A", "B", "C", "D"];
-
-      question.choices.forEach((choiceText, index) => {
-        const button = document.createElement("button");
-        button.className = "choice";
-        button.innerHTML = `<b>${letters[index]}.</b> ${choiceText}`;
-        button.onclick = () => choose(index, button);
-        choicesBox.appendChild(button);
-      });
-    }
-
-    function choose(index, button) {
-      if (locked) return;
-
-      const question = GAME.questions[order[idx]];
-      const chosen = "ABCD"[index];
-
-      attempts++;
-
-      if (chosen === question.answer) {
-        locked = true;
-        button.classList.add("correct");
-
-        $("feedback").innerHTML = "<b>Correct.</b><br>" + question.explanation;
-
-        updateHud();
-
-        setTimeout(() => {
-          idx++;
-
-          if (idx >= GAME.questions.length) {
-            finish();
-          } else {
-            render();
-          }
-        }, 5000);
-
-      } else {
-        misses++;
-        button.classList.add("incorrect");
-        button.disabled = true;
-
-        $("feedback").innerHTML = "<b>Not yet.</b> Hint: " + question.hint;
-
-        updateHud();
-      }
-    }
-
-    function finish() {
-      clearInterval(timer);
-
-      $("gamePanel").classList.add("hide");
-      $("finishPanel").classList.remove("hide");
-
-      const end = new Date();
-      const perfectRun = misses === 0;
-
-      $("finishTitle").textContent = perfectRun
-        ? "Perfect Run — Submit Ticket"
-        : "Mastery required — restart";
-
-      $("finishMsg").textContent = perfectRun
-        ? "Show this ticket to your teacher."
-        : "No ticket generated. Restart and complete a perfect run.";
-
-      const ticket = $("ticket");
-      ticket.className = perfectRun ? "ticket" : "ticket danger";
-
-      if (perfectRun) {
-        ticket.innerHTML = `
-          <h2>Submit Ticket</h2>
-
-          <div class="ticket-grid">
-            <div>
-              <span class="label">Student</span>
-              <b>${student}</b>
-            </div>
-
-            <div>
-              <span class="label">Date</span>
-              <b>${end.toLocaleDateString()}</b>
-            </div>
-
-            <div>
-              <span class="label">Start Time</span>
-              <b>${timeStr(new Date(startMs))}</b>
-            </div>
-
-            <div>
-              <span class="label">End Time</span>
-              <b>${timeStr(end)}</b>
-            </div>
-
-            <div>
-              <span class="label">Runtime</span>
-              <b>${elapsed()}</b>
-            </div>
-
-            <div>
-              <span class="label">Accuracy</span>
-              <b>${accuracy()}%</b>
-            </div>
-
-            <div>
-              <span class="label">Misses</span>
-              <b>${misses}</b>
-            </div>
-
-            <div>
-              <span class="label">Result</span>
-              <b>Perfect Run</b>
-            </div>
+    ticketArea.innerHTML = `
+      <div class="ticket">
+        <h3>Submit Ticket — Perfect Run</h3>
+        <div class="ticket-grid">
+          <div class="ticket-item">
+            <div class="ticket-label">Student Name</div>
+            <div class="ticket-value">${escapeHtml(state.studentName)}</div>
           </div>
-        `;
-      } else {
-        ticket.innerHTML = `
-          <h2>Mastery required — restart</h2>
-          <p>You must finish with 0 misses to generate a submit ticket.</p>
-        `;
-      }
-    }
+          <div class="ticket-item">
+            <div class="ticket-label">Date</div>
+            <div class="ticket-value">${formatDate(state.endedAt)}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Start Time</div>
+            <div class="ticket-value">${formatClock(state.startedAt)}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">End Time</div>
+            <div class="ticket-value">${formatClock(state.endedAt)}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Runtime</div>
+            <div class="ticket-value">${elapsed}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Accuracy</div>
+            <div class="ticket-value">${accuracy}%</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Misses</div>
+            <div class="ticket-value">${state.misses}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Result</div>
+            <div class="ticket-value">Perfect Run</div>
+          </div>
+        </div>
+      </div>
+    `;
+  } else {
+    $("finishTitle").textContent = "Mastery Required";
+    ticketArea.innerHTML = `
+      <div class="mastery-message">
+        Mastery required — restart
+      </div>
+    `;
+  }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      $("gameTitle").textContent = GAME.title;
-      $("gameSub").textContent = GAME.subtitle;
-      $("gameMeta").textContent = GAME.cs + " • 9 Questions • Perfect Run Required";
+  sessionStorage.removeItem(STORAGE_KEY);
+}
 
-      $("startBtn").onclick = startGame;
-      $("resetBtn").onclick = hardReset;
-      $("resetBtn2").onclick = hardReset;
-    });
-  </script>
+function hardReset() {
+  sessionStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+</script>
 </body>
 </html>
