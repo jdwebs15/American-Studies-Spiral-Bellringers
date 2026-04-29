@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Game 7 — Modern America</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Game 7 — Late 20th Century America — Legend Mastery Series</title>
   <link rel="stylesheet" href="../styles.css" />
 </head>
 
@@ -12,484 +12,518 @@
 
     <div class="topbar">
       <a class="btn secondary" href="../index.html">← Back to Hub</a>
-      <button id="resetBtn" class="secondary">Hard Reset</button>
+      <button class="btn danger" id="hardResetTop" type="button">Hard Reset</button>
     </div>
 
     <header class="hero">
       <div class="kicker">Legend Mastery Series • American Studies Bellringer Set A</div>
-      <h1 id="gameTitle">Game</h1>
-      <p id="gameSub" class="sub"></p>
-
+      <h1>Game 7 — Late 20th Century America</h1>
+      <p class="sub">Postwar prosperity, science and technology, migration, public policy debates</p>
       <div class="pills">
-        <span id="gameMeta" class="pill"></span>
-        <span class="pill">Auto-Submit</span>
+        <span class="pill">CS 28–30</span>
+        <span class="pill">9 Questions</span>
+        <span class="pill">Perfect Run Required</span>
+        <span class="pill">Auto-Submit on Click</span>
         <span class="pill">No Ticket Unless Perfect</span>
       </div>
     </header>
 
-    <main class="game-shell" style="margin-top: 20px;">
+    <main class="game-shell">
 
-      <section id="startPanel" class="start">
-        <h2>Name Entry Required</h2>
-        <p class="muted">
-          Enter your name, then complete all 9 questions. One miss means no ticket.
-          You must restart for a perfect run.
-        </p>
+      <section id="startScreen" class="screen active">
+        <div class="name-card">
+          <h2>Name Entry Required</h2>
+          <p class="muted">
+            Enter your first and last name, then complete all 9 questions.
+            One miss means no ticket. You must restart for a perfect run.
+          </p>
 
-        <input
-          id="studentName"
-          class="input"
-          placeholder="First and last name"
-          autocomplete="name"
-        />
-
-        <button id="startBtn">Start Game</button>
+          <div class="field-row">
+            <input id="studentName" type="text" placeholder="First and last name" autocomplete="off" />
+            <button class="btn" id="startBtn" type="button">Start Game</button>
+          </div>
+        </div>
       </section>
 
-      <section id="gamePanel" class="hide">
+      <section id="gameScreen" class="screen">
         <div class="hud">
-          <div>
-            <span class="label">Progress</span>
-            <b id="progress">1 / 9</b>
+          <div class="hud-box">
+            <div class="hud-label">Progress</div>
+            <div class="hud-value" id="progressText">1 / 9</div>
           </div>
-
-          <div>
-            <span class="label">Accuracy</span>
-            <b id="acc">100%</b>
+          <div class="hud-box">
+            <div class="hud-label">Accuracy</div>
+            <div class="hud-value" id="accuracyText">100%</div>
           </div>
-
-          <div>
-            <span class="label">Misses</span>
-            <b id="misses">0</b>
+          <div class="hud-box">
+            <div class="hud-label">Misses</div>
+            <div class="hud-value" id="missesText">0</div>
           </div>
-
-          <div>
-            <span class="label">Timer</span>
-            <b id="timer">0:00</b>
+          <div class="hud-box">
+            <div class="hud-label">Timer</div>
+            <div class="hud-value" id="timerText">0:00</div>
           </div>
         </div>
 
-        <p id="csLine" class="muted small"></p>
-        <div id="qText" class="question"></div>
-        <div id="choices" class="choices"></div>
-        <div id="feedback" class="feedback"></div>
-      </section>
-
-      <section id="finishPanel" class="hide">
-        <h2 id="finishTitle"></h2>
-        <p id="finishMsg" class="muted"></p>
-
-        <div id="ticket"></div>
-
-        <div class="btn-row">
-          <button id="resetBtn2">Hard Reset / Try Again</button>
-          <a class="btn secondary" href="../index.html">Back to Hub</a>
+        <div class="question-card">
+          <div class="question-meta" id="questionMeta"></div>
+          <h2 class="question" id="questionText"></h2>
+          <div class="choices" id="choices"></div>
+          <div class="feedback" id="feedback">
+            Select the best answer. The game auto-submits on click.
+          </div>
         </div>
       </section>
 
-      <div id="errorBox" class="errorbox hide"></div>
+      <section id="finishScreen" class="screen">
+        <div class="finish-card">
+          <h2 id="finishTitle">Finished</h2>
+          <p class="muted" id="finishSummary"></p>
+
+          <div id="ticketArea"></div>
+
+          <div class="btn-row">
+            <button class="btn danger" id="hardResetBottom" type="button">Hard Reset / Try Again</button>
+            <a class="btn secondary" href="../index.html">Back to Hub</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="error-box" id="errorBox"></div>
 
     </main>
 
-    <p class="footer small">
+    <p class="small-note">
       Correct answer required to advance • Hint on miss • Explanation shown after correct answer
     </p>
 
   </div>
 
-  <script>
-    /*
-      ============================================================
-      QUESTION BANK — EDIT HERE
-      ============================================================
+<script>
+/* =========================================================
+   QUESTION BANK — CLEAN / EDITABLE
+   Edit question, choices, answer, hint, and explanation here.
+========================================================= */
+const QUESTIONS = [
+  {
+    "id": "G7-Q1",
+    "cs": "CS 28",
+    "question": "Which postwar factor contributed to economic growth after World War II?",
+    "choices": [
+      "Increased demand for goods and services",
+      "Collapse of suburbs",
+      "End of consumer spending",
+      "Elimination of television"
+    ],
+    "answer": "Increased demand for goods and services",
+    "hint": "Postwar prosperity involved production and consumption.",
+    "explanation": "Demand for goods, suburban growth, and the Baby Boom helped drive postwar prosperity."
+  },
+  {
+    "id": "G7-Q2",
+    "cs": "CS 28",
+    "question": "Which technology helped shape American family entertainment after World War II?",
+    "choices": [
+      "Television",
+      "Cotton gin",
+      "Steam locomotive",
+      "Morse code only"
+    ],
+    "answer": "Television",
+    "hint": "This became a dominant mass media form.",
+    "explanation": "Television shaped entertainment, advertising, politics, and shared national culture."
+  },
+  {
+    "id": "G7-Q3",
+    "cs": "CS 28",
+    "question": "Which medical advance affected American life in the postwar period?",
+    "choices": [
+      "Polio vaccine",
+      "Smallpox inoculation in colonial America",
+      "Bloodletting",
+      "The iron plow"
+    ],
+    "answer": "Polio vaccine",
+    "hint": "Think postwar medicine and public health.",
+    "explanation": "The polio vaccine was one of several science and medical advances that changed postwar American life."
+  },
+  {
+    "id": "G7-Q4",
+    "cs": "CS 29",
+    "question": "What was one social effect of movement from cities to suburbs?",
+    "choices": [
+      "White flight and urban-suburban political polarization",
+      "End of urban problems",
+      "Decline in suburban populations",
+      "Elimination of discriminatory lending"
+    ],
+    "answer": "White flight and urban-suburban political polarization",
+    "hint": "Suburbanization affected cities and politics.",
+    "explanation": "Suburban growth contributed to white flight, redlining, and political divisions between urban and suburban communities."
+  },
+  {
+    "id": "G7-Q5",
+    "cs": "CS 29",
+    "question": "What was one effect of migration from the Rust Belt to the Sun Belt?",
+    "choices": [
+      "Growth in southern and western states and a shift in political power",
+      "Collapse of high-tech industries",
+      "End of congressional reapportionment",
+      "Decline in the Sun Belt population"
+    ],
+    "answer": "Growth in southern and western states and a shift in political power",
+    "hint": "Population shifts can affect representation.",
+    "explanation": "Migration to the Sun Belt helped shift jobs, population, and congressional representation."
+  },
+  {
+    "id": "G7-Q6",
+    "cs": "CS 29",
+    "question": "How did the 1965 Immigration Act affect the United States?",
+    "choices": [
+      "It increased immigration from Asia, Africa, and Latin America",
+      "It ended all immigration",
+      "It allowed only European immigration",
+      "It banned refugees permanently"
+    ],
+    "answer": "It increased immigration from Asia, Africa, and Latin America",
+    "hint": "The law changed immigration patterns.",
+    "explanation": "The 1965 Immigration Act changed the nation\u2019s demographic makeup by allowing more immigrants from outside Europe."
+  },
+  {
+    "id": "G7-Q7",
+    "cs": "CS 30",
+    "question": "What was a major focus of U.S. foreign policy after September 11, 2001?",
+    "choices": [
+      "Combating terrorism internationally",
+      "Reducing involvement in world affairs",
+      "Ending all military alliances",
+      "Eliminating overseas military bases"
+    ],
+    "answer": "Combating terrorism internationally",
+    "hint": "Think about the War on Terror.",
+    "explanation": "After 9/11, U.S. foreign policy focused heavily on counterterrorism, Afghanistan, Iraq, and security partnerships."
+  },
+  {
+    "id": "G7-Q8",
+    "cs": "CS 30",
+    "question": "Why did the United States invade Afghanistan in 2001?",
+    "choices": [
+      "To remove the Taliban for harboring al-Qaeda",
+      "To acquire territory",
+      "To support Soviet influence",
+      "To expand trade networks only"
+    ],
+    "answer": "To remove the Taliban for harboring al-Qaeda",
+    "hint": "The invasion was tied to the 9/11 attacks.",
+    "explanation": "The Taliban protected al-Qaeda, leading the U.S. to target Afghanistan after 9/11."
+  },
+  {
+    "id": "G7-Q9",
+    "cs": "CS 30",
+    "question": "What was one challenge of U.S. involvement in the Middle East after 2001?",
+    "choices": [
+      "Difficulty establishing stable democratic governments",
+      "Decline in regional conflict",
+      "Reduced terrorism concerns",
+      "End of national security debates"
+    ],
+    "answer": "Difficulty establishing stable democratic governments",
+    "hint": "Military action did not automatically create stability.",
+    "explanation": "Regional conflict, sectarian division, and political instability made U.S. goals difficult to achieve."
+  }
+];
 
-      To edit a question:
-      1. Change the question text.
-      2. Change any choice text.
-      3. Set answer to "A", "B", "C", or "D".
-      4. Keep each game at 9 questions.
-      5. Hints should guide students without revealing the answer.
-      6. Explanations appear after a correct answer and linger about 5 seconds.
-    */
+/* =========================================================
+   GAME ENGINE — DO NOT EDIT UNLESS CHANGING BEHAVIOR
+========================================================= */
+const GAME_TITLE = "Game 7 — Late 20th Century America";
+const STORAGE_KEY = "amstud-bellringer-set-a-game-7";
 
-    const GAME = {
-  "title": "Game 7 — Modern America",
-  "subtitle": "1970s Economy, Globalization, Technology, Environment, Post-Cold War Foreign Policy",
-  "cs": "CS 28–30",
-  "key": "amstud_bellringer_set_a_game_7",
-  "questions": [
-    {
-      "id": "Q61",
-      "question": "What was a major cause of economic “stagflation” in the 1970s?",
-      "choices": [
-        "Overproduction of crops",
-        "Oil embargo and rising energy costs",
-        "Decline in immigration",
-        "Reduction in federal spending"
-      ],
-      "answer": "B",
-      "explanation": "The OPEC oil embargo caused fuel shortages, driving prices up while economic growth slowed. This unusual combination of inflation and stagnation strained families and exposed vulnerabilities in the global economy.",
-      "cs": "CS 28",
-      "efl": "Explain economic challenges of the 1970s",
-      "hint": "Stagflation means inflation plus slow growth/unemployment."
-    },
-    {
-      "id": "Q62",
-      "question": "Which development weakened U.S. manufacturing during the 1970s–1980s?",
-      "choices": [
-        "Rising domestic steel prices",
-        "Increased foreign competition",
-        "Growth of monopolies",
-        "Decline in suburban housing"
-      ],
-      "answer": "B",
-      "explanation": "Foreign producers, especially in Japan and Europe, offered cheaper and higher-quality goods. This competition contributed to factory closures, job losses, and economic decline in regions later known as the Rust Belt.",
-      "cs": "CS 28",
-      "efl": "Explain decline of manufacturing",
-      "hint": "Foreign competition and changing production hurt U.S. manufacturing."
-    },
-    {
-      "id": "Q63",
-      "question": "What was one outcome of factory closures in the Rust Belt?",
-      "choices": [
-        "Massive increase in agricultural jobs",
-        "Population decline in industrial cities",
-        "Increased manufacturing exports",
-        "Growth of steel production"
-      ],
-      "answer": "B",
-      "explanation": "As factories shut down, workers moved away in search of employment. Cities like Detroit, Cleveland, and Youngstown saw shrinking populations and reduced tax bases, creating long-term economic challenges. WEDNESDAY (2 MCQs) Content: CS 27 + OST Recall",
-      "cs": "CS 28",
-      "efl": "Describe Rust Belt factory closures",
-      "hint": "Factory closings caused job loss and population decline."
-    },
-    {
-      "id": "Q72",
-      "question": "What issue led to federal laws such as the Clean Air and Clean Water Acts?",
-      "choices": [
-        "Rural depopulation",
-        "Pollution and environmental damage",
-        "Decline of suburban housing",
-        "Reduced factory production"
-      ],
-      "answer": "B",
-      "explanation": "Growing awareness of pollution’s effects on human health pushed Congress to pass sweeping environmental laws. These acts aimed to regulate emissions, improve water quality, and protect natural resources.",
-      "cs": "CS 29",
-      "efl": "Explain environmental policy responses",
-      "hint": "Pollution concerns led to environmental laws and agencies."
-    },
-    {
-      "id": "Q73",
-      "question": "What was one major effect of globalization on the U.S. economy in the late 20th century?",
-      "choices": [
-        "Decline in international trade",
-        "Increased economic interdependence",
-        "End of foreign competition",
-        "Elimination of service-sector jobs"
-      ],
-      "answer": "B",
-      "explanation": "Globalization connected economies through trade, communication, and technology. The U.S. economy became tightly linked with global markets, leading to new opportunities in technology and services, but also exposing American workers to foreign competition.",
-      "cs": "CS 28",
-      "efl": "Analyze globalization effects",
-      "hint": "Globalization increased competition and outsourcing pressure."
-    },
-    {
-      "id": "Q75",
-      "question": "What was one effect of increased automation and robotics in U.S. factories?",
-      "choices": [
-        "Increased factory employment",
-        "Decreased production efficiency",
-        "Growth in high-skilled technical jobs",
-        "Elimination of all manufacturing"
-      ],
-      "answer": "C",
-      "explanation": "Automation reduced the number of assembly-line jobs but increased demand for specialized workers who could operate and maintain advanced machinery. This shift contributed to long-term changes in workforce training and skill requirements. WEDNESDAY (2 MCQs) Content: CS 29 + OST Recall",
-      "cs": "CS 28",
-      "efl": "Analyze automation and robotics",
-      "hint": "Machines raised productivity while reducing some factory jobs."
-    },
-    {
-      "id": "Q76",
-      "question": "What was the primary purpose of NAFTA (1994)?",
-      "choices": [
-        "Restrict trade between the U.S., Mexico, and Canada",
-        "Create free trade by reducing tariffs among member countries",
-        "Limit immigration from Mexico",
-        "Increase military cooperation in North America"
-      ],
-      "answer": "B",
-      "explanation": "NAFTA created a free-trade zone by reducing tariffs and trade barriers. Supporters believed it would boost economic growth; critics argued it contributed to manufacturing job losses due to companies relocating for cheaper labor.",
-      "cs": "CS 28",
-      "efl": "Explain NAFTA and trade",
-      "hint": "NAFTA reduced trade barriers among the U.S., Canada, and Mexico."
-    },
-    {
-      "id": "Q79",
-      "question": "What was a major focus of U.S. foreign policy after the terrorist attacks of September 11, 2001?",
-      "choices": [
-        "Reducing involvement in world affairs",
-        "Expanding isolationism",
-        "Combating terrorism internationally",
-        "Eliminating overseas military bases"
-      ],
-      "answer": "C",
-      "explanation": "After 9/11, U.S. policy centered on preventing terrorism, leading to military operations in Afghanistan and Iraq, expanded intelligence efforts, and global counterterrorism partnerships.",
-      "cs": "CS 30",
-      "efl": "Explain post-9/11 foreign policy",
-      "hint": "After 9/11, counterterrorism became a major focus."
-    },
-    {
-      "id": "Q82",
-      "question": "What was the purpose of the Persian Gulf War (1991)?",
-      "choices": [
-        "Remove Soviet influence from the region",
-        "Prevent Iraq from controlling Kuwait and threatening oil supplies",
-        "Expand U.S. territory in the Middle East",
-        "Enforce isolationist policies"
-      ],
-      "answer": "B",
-      "explanation": "Iraq’s invasion of Kuwait threatened regional stability and global oil access. A U.S.-led coalition used military force to push Iraqi troops out and restore Kuwait’s sovereignty.",
-      "cs": "CS 30",
-      "efl": "Explain post-Cold War foreign policy",
-      "hint": "The Persian Gulf War responded to Iraq’s invasion of Kuwait."
-    }
-  ]
+let state = {
+  studentName: "",
+  index: 0,
+  misses: 0,
+  missedIds: [],
+  startedAt: null,
+  endedAt: null,
+  timerId: null
 };
 
-    /*
-      ============================================================
-      GAME ENGINE — DO NOT EDIT UNLESS CHANGING GAME BEHAVIOR
-      ============================================================
-    */
+const $ = (id) => document.getElementById(id);
 
-    const $ = (id) => document.getElementById(id);
+window.addEventListener("error", function(event) {
+  showError(event.message + "\\n" + event.filename + ":" + event.lineno);
+});
 
-    let order = [];
-    let idx = 0;
-    let misses = 0;
-    let attempts = 0;
-    let startMs = null;
-    let timer = null;
-    let student = "";
-    let locked = false;
+document.addEventListener("DOMContentLoaded", function() {
+  $("startBtn").addEventListener("click", startGame);
+  $("hardResetTop").addEventListener("click", hardReset);
+  $("hardResetBottom").addEventListener("click", hardReset);
 
-    function showError(message) {
-      $("errorBox").classList.remove("hide");
-      $("errorBox").textContent = message;
-    }
+  $("studentName").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") startGame();
+  });
 
-    window.addEventListener("error", (event) => {
-      showError("Game error: " + event.message);
+  loadSavedAttempt();
+});
+
+function showError(message) {
+  const box = $("errorBox");
+  box.style.display = "block";
+  box.textContent = "Error caught:\\n" + message;
+}
+
+function saveState() {
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+    studentName: state.studentName,
+    index: state.index,
+    misses: state.misses,
+    missedIds: state.missedIds,
+    startedAt: state.startedAt
+  }));
+}
+
+function loadSavedAttempt() {
+  const raw = sessionStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+
+  try {
+    const saved = JSON.parse(raw);
+    if (!saved || !saved.studentName) return;
+
+    state.studentName = saved.studentName;
+    state.index = saved.index || 0;
+    state.misses = saved.misses || 0;
+    state.missedIds = saved.missedIds || [];
+    state.startedAt = saved.startedAt || new Date().toISOString();
+
+    showScreen("gameScreen");
+    startTimer();
+    renderQuestion();
+  } catch (error) {
+    showError(error.message);
+  }
+}
+
+function startGame() {
+  const name = $("studentName").value.trim();
+
+  if (!name) {
+    alert("Enter your first and last name before starting.");
+    return;
+  }
+
+  state.studentName = name;
+  state.index = 0;
+  state.misses = 0;
+  state.missedIds = [];
+  state.startedAt = new Date().toISOString();
+  state.endedAt = null;
+
+  saveState();
+  showScreen("gameScreen");
+  startTimer();
+  renderQuestion();
+}
+
+function showScreen(screenId) {
+  document.querySelectorAll(".screen").forEach(function(screen) {
+    screen.classList.remove("active");
+  });
+  $(screenId).classList.add("active");
+}
+
+function startTimer() {
+  if (state.timerId) clearInterval(state.timerId);
+
+  state.timerId = setInterval(function() {
+    const elapsed = elapsedSeconds();
+    $("timerText").textContent = formatSeconds(elapsed);
+  }, 1000);
+}
+
+function elapsedSeconds() {
+  if (!state.startedAt) return 0;
+  return Math.max(0, Math.floor((Date.now() - new Date(state.startedAt).getTime()) / 1000));
+}
+
+function formatSeconds(totalSeconds) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return minutes + ":" + String(seconds).padStart(2, "0");
+}
+
+function formatClock(isoString) {
+  return new Date(isoString).toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit"
+  });
+}
+
+function formatDate(isoString) {
+  return new Date(isoString).toLocaleDateString();
+}
+
+function currentAccuracy() {
+  const uniqueMisses = new Set(state.missedIds).size;
+  const correctFirstTry = Math.max(0, QUESTIONS.length - uniqueMisses);
+  return Math.round((correctFirstTry / QUESTIONS.length) * 100);
+}
+
+function renderHud() {
+  $("progressText").textContent = Math.min(state.index + 1, QUESTIONS.length) + " / " + QUESTIONS.length;
+  $("accuracyText").textContent = currentAccuracy() + "%";
+  $("missesText").textContent = state.misses;
+  $("timerText").textContent = formatSeconds(elapsedSeconds());
+}
+
+function renderQuestion() {
+  if (state.index >= QUESTIONS.length) {
+    finishGame();
+    return;
+  }
+
+  renderHud();
+
+  const q = QUESTIONS[state.index];
+  $("questionMeta").textContent = q.id + " • " + q.cs;
+  $("questionText").textContent = q.question;
+  $("feedback").className = "feedback";
+  $("feedback").textContent = "Select the best answer. The game auto-submits on click.";
+
+  const choices = $("choices");
+  choices.innerHTML = "";
+
+  q.choices.forEach(function(choiceText) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "choice";
+    button.textContent = choiceText;
+    button.addEventListener("click", function() {
+      submitChoice(button, choiceText);
+    });
+    choices.appendChild(button);
+  });
+}
+
+function submitChoice(button, choiceText) {
+  const q = QUESTIONS[state.index];
+  const allChoices = Array.from(document.querySelectorAll(".choice"));
+
+  if (choiceText === q.answer) {
+    button.classList.add("correct");
+    allChoices.forEach(function(choice) {
+      choice.disabled = true;
     });
 
-    window.addEventListener("unhandledrejection", (event) => {
-      const reason = event.reason?.message || event.reason;
-      showError("Game promise error: " + reason);
-    });
+    $("feedback").className = "feedback good";
+    $("feedback").innerHTML = "<strong>Correct.</strong><br>" + q.explanation;
 
-    function pad(number) {
-      return String(number).padStart(2, "0");
+    setTimeout(function() {
+      state.index += 1;
+      saveState();
+      renderQuestion();
+    }, 5000);
+
+  } else {
+    button.classList.add("incorrect");
+    button.disabled = true;
+
+    state.misses += 1;
+    if (!state.missedIds.includes(q.id)) {
+      state.missedIds.push(q.id);
     }
 
-    function timeStr(date) {
-      return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-    }
+    saveState();
+    renderHud();
 
-    function elapsed() {
-      const seconds = Math.floor((Date.now() - startMs) / 1000);
-      return `${Math.floor(seconds / 60)}:${pad(seconds % 60)}`;
-    }
+    $("feedback").className = "feedback warn";
+    $("feedback").innerHTML = "<strong>Hint:</strong> " + q.hint + "<br><br>Choose again. Correct answer required to advance.";
+  }
+}
 
-    function accuracy() {
-      if (!attempts) return 100;
-      return Math.round(((attempts - misses) / attempts) * 100);
-    }
+function finishGame() {
+  if (state.timerId) clearInterval(state.timerId);
 
-    function hardReset() {
-      try {
-        sessionStorage.removeItem(GAME.key);
-        localStorage.removeItem(GAME.key);
-      } catch (error) {
-        console.warn("Storage clear skipped:", error);
-      }
+  state.endedAt = new Date().toISOString();
 
-      location.reload();
-    }
+  showScreen("finishScreen");
 
-    function startGame() {
-      student = $("studentName").value.trim();
+  const elapsed = formatSeconds(Math.floor((new Date(state.endedAt).getTime() - new Date(state.startedAt).getTime()) / 1000));
+  const accuracy = currentAccuracy();
 
-      if (!student) {
-        showError("Enter your name to begin.");
-        return;
-      }
+  $("finishSummary").textContent = "Name: " + state.studentName + " • Accuracy: " + accuracy + "% • Misses: " + state.misses + " • Runtime: " + elapsed;
 
-      $("startPanel").classList.add("hide");
-      $("gamePanel").classList.remove("hide");
+  const ticketArea = $("ticketArea");
+  ticketArea.innerHTML = "";
 
-      startMs = Date.now();
-      order = GAME.questions.map((_, index) => index);
-      idx = 0;
-      misses = 0;
-      attempts = 0;
+  if (state.misses === 0) {
+    $("finishTitle").textContent = "Perfect Run Complete";
 
-      timer = setInterval(updateHud, 500);
-
-      render();
-    }
-
-    function updateHud() {
-      $("progress").textContent = `${Math.min(idx + 1, GAME.questions.length)} / ${GAME.questions.length}`;
-      $("acc").textContent = accuracy() + "%";
-      $("misses").textContent = misses;
-      $("timer").textContent = startMs ? elapsed() : "0:00";
-    }
-
-    function render() {
-      locked = false;
-      updateHud();
-
-      const question = GAME.questions[order[idx]];
-
-      $("qText").textContent = question.question;
-      $("csLine").textContent = question.cs + " • " + question.efl;
-      $("feedback").innerHTML =
-        "Choose the best answer. Incorrect choices give a hint but do not reveal the answer.";
-
-      const choicesBox = $("choices");
-      choicesBox.innerHTML = "";
-
-      const letters = ["A", "B", "C", "D"];
-
-      question.choices.forEach((choiceText, index) => {
-        const button = document.createElement("button");
-        button.className = "choice";
-        button.innerHTML = `<b>${letters[index]}.</b> ${choiceText}`;
-        button.onclick = () => choose(index, button);
-        choicesBox.appendChild(button);
-      });
-    }
-
-    function choose(index, button) {
-      if (locked) return;
-
-      const question = GAME.questions[order[idx]];
-      const chosen = "ABCD"[index];
-
-      attempts++;
-
-      if (chosen === question.answer) {
-        locked = true;
-        button.classList.add("correct");
-
-        $("feedback").innerHTML = "<b>Correct.</b><br>" + question.explanation;
-
-        updateHud();
-
-        setTimeout(() => {
-          idx++;
-
-          if (idx >= GAME.questions.length) {
-            finish();
-          } else {
-            render();
-          }
-        }, 5000);
-
-      } else {
-        misses++;
-        button.classList.add("incorrect");
-        button.disabled = true;
-
-        $("feedback").innerHTML = "<b>Not yet.</b> Hint: " + question.hint;
-
-        updateHud();
-      }
-    }
-
-    function finish() {
-      clearInterval(timer);
-
-      $("gamePanel").classList.add("hide");
-      $("finishPanel").classList.remove("hide");
-
-      const end = new Date();
-      const perfectRun = misses === 0;
-
-      $("finishTitle").textContent = perfectRun
-        ? "Perfect Run — Submit Ticket"
-        : "Mastery required — restart";
-
-      $("finishMsg").textContent = perfectRun
-        ? "Show this ticket to your teacher."
-        : "No ticket generated. Restart and complete a perfect run.";
-
-      const ticket = $("ticket");
-      ticket.className = perfectRun ? "ticket" : "ticket danger";
-
-      if (perfectRun) {
-        ticket.innerHTML = `
-          <h2>Submit Ticket</h2>
-
-          <div class="ticket-grid">
-            <div>
-              <span class="label">Student</span>
-              <b>${student}</b>
-            </div>
-
-            <div>
-              <span class="label">Date</span>
-              <b>${end.toLocaleDateString()}</b>
-            </div>
-
-            <div>
-              <span class="label">Start Time</span>
-              <b>${timeStr(new Date(startMs))}</b>
-            </div>
-
-            <div>
-              <span class="label">End Time</span>
-              <b>${timeStr(end)}</b>
-            </div>
-
-            <div>
-              <span class="label">Runtime</span>
-              <b>${elapsed()}</b>
-            </div>
-
-            <div>
-              <span class="label">Accuracy</span>
-              <b>${accuracy()}%</b>
-            </div>
-
-            <div>
-              <span class="label">Misses</span>
-              <b>${misses}</b>
-            </div>
-
-            <div>
-              <span class="label">Result</span>
-              <b>Perfect Run</b>
-            </div>
+    ticketArea.innerHTML = `
+      <div class="ticket">
+        <h3>Submit Ticket — Perfect Run</h3>
+        <div class="ticket-grid">
+          <div class="ticket-item">
+            <div class="ticket-label">Student Name</div>
+            <div class="ticket-value">${escapeHtml(state.studentName)}</div>
           </div>
-        `;
-      } else {
-        ticket.innerHTML = `
-          <h2>Mastery required — restart</h2>
-          <p>You must finish with 0 misses to generate a submit ticket.</p>
-        `;
-      }
-    }
+          <div class="ticket-item">
+            <div class="ticket-label">Date</div>
+            <div class="ticket-value">${formatDate(state.endedAt)}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Start Time</div>
+            <div class="ticket-value">${formatClock(state.startedAt)}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">End Time</div>
+            <div class="ticket-value">${formatClock(state.endedAt)}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Runtime</div>
+            <div class="ticket-value">${elapsed}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Accuracy</div>
+            <div class="ticket-value">${accuracy}%</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Misses</div>
+            <div class="ticket-value">${state.misses}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Result</div>
+            <div class="ticket-value">Perfect Run</div>
+          </div>
+        </div>
+      </div>
+    `;
+  } else {
+    $("finishTitle").textContent = "Mastery Required";
+    ticketArea.innerHTML = `
+      <div class="mastery-message">
+        Mastery required — restart
+      </div>
+    `;
+  }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      $("gameTitle").textContent = GAME.title;
-      $("gameSub").textContent = GAME.subtitle;
-      $("gameMeta").textContent = GAME.cs + " • 9 Questions • Perfect Run Required";
+  sessionStorage.removeItem(STORAGE_KEY);
+}
 
-      $("startBtn").onclick = startGame;
-      $("resetBtn").onclick = hardReset;
-      $("resetBtn2").onclick = hardReset;
-    });
-  </script>
+function hardReset() {
+  sessionStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+</script>
 </body>
 </html>
