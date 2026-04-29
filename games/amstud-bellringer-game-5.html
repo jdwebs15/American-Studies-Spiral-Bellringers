@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Game 5 — World Wars & Interwar Period</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Game 5 — World Wars & Interwar Period — Legend Mastery Series</title>
   <link rel="stylesheet" href="../styles.css" />
 </head>
 
@@ -12,484 +12,518 @@
 
     <div class="topbar">
       <a class="btn secondary" href="../index.html">← Back to Hub</a>
-      <button id="resetBtn" class="secondary">Hard Reset</button>
+      <button class="btn danger" id="hardResetTop" type="button">Hard Reset</button>
     </div>
 
     <header class="hero">
       <div class="kicker">Legend Mastery Series • American Studies Bellringer Set A</div>
-      <h1 id="gameTitle">Game</h1>
-      <p id="gameSub" class="sub"></p>
-
+      <h1>Game 5 — World Wars & Interwar Period</h1>
+      <p class="sub">Imperialism, WWI, 1920s, Great Depression, New Deal, WWII</p>
       <div class="pills">
-        <span id="gameMeta" class="pill"></span>
-        <span class="pill">Auto-Submit</span>
+        <span class="pill">CS 14–21</span>
+        <span class="pill">9 Questions</span>
+        <span class="pill">Perfect Run Required</span>
+        <span class="pill">Auto-Submit on Click</span>
         <span class="pill">No Ticket Unless Perfect</span>
       </div>
     </header>
 
-    <main class="game-shell" style="margin-top: 20px;">
+    <main class="game-shell">
 
-      <section id="startPanel" class="start">
-        <h2>Name Entry Required</h2>
-        <p class="muted">
-          Enter your name, then complete all 9 questions. One miss means no ticket.
-          You must restart for a perfect run.
-        </p>
+      <section id="startScreen" class="screen active">
+        <div class="name-card">
+          <h2>Name Entry Required</h2>
+          <p class="muted">
+            Enter your first and last name, then complete all 9 questions.
+            One miss means no ticket. You must restart for a perfect run.
+          </p>
 
-        <input
-          id="studentName"
-          class="input"
-          placeholder="First and last name"
-          autocomplete="name"
-        />
-
-        <button id="startBtn">Start Game</button>
+          <div class="field-row">
+            <input id="studentName" type="text" placeholder="First and last name" autocomplete="off" />
+            <button class="btn" id="startBtn" type="button">Start Game</button>
+          </div>
+        </div>
       </section>
 
-      <section id="gamePanel" class="hide">
+      <section id="gameScreen" class="screen">
         <div class="hud">
-          <div>
-            <span class="label">Progress</span>
-            <b id="progress">1 / 9</b>
+          <div class="hud-box">
+            <div class="hud-label">Progress</div>
+            <div class="hud-value" id="progressText">1 / 9</div>
           </div>
-
-          <div>
-            <span class="label">Accuracy</span>
-            <b id="acc">100%</b>
+          <div class="hud-box">
+            <div class="hud-label">Accuracy</div>
+            <div class="hud-value" id="accuracyText">100%</div>
           </div>
-
-          <div>
-            <span class="label">Misses</span>
-            <b id="misses">0</b>
+          <div class="hud-box">
+            <div class="hud-label">Misses</div>
+            <div class="hud-value" id="missesText">0</div>
           </div>
-
-          <div>
-            <span class="label">Timer</span>
-            <b id="timer">0:00</b>
+          <div class="hud-box">
+            <div class="hud-label">Timer</div>
+            <div class="hud-value" id="timerText">0:00</div>
           </div>
         </div>
 
-        <p id="csLine" class="muted small"></p>
-        <div id="qText" class="question"></div>
-        <div id="choices" class="choices"></div>
-        <div id="feedback" class="feedback"></div>
-      </section>
-
-      <section id="finishPanel" class="hide">
-        <h2 id="finishTitle"></h2>
-        <p id="finishMsg" class="muted"></p>
-
-        <div id="ticket"></div>
-
-        <div class="btn-row">
-          <button id="resetBtn2">Hard Reset / Try Again</button>
-          <a class="btn secondary" href="../index.html">Back to Hub</a>
+        <div class="question-card">
+          <div class="question-meta" id="questionMeta"></div>
+          <h2 class="question" id="questionText"></h2>
+          <div class="choices" id="choices"></div>
+          <div class="feedback" id="feedback">
+            Select the best answer. The game auto-submits on click.
+          </div>
         </div>
       </section>
 
-      <div id="errorBox" class="errorbox hide"></div>
+      <section id="finishScreen" class="screen">
+        <div class="finish-card">
+          <h2 id="finishTitle">Finished</h2>
+          <p class="muted" id="finishSummary"></p>
+
+          <div id="ticketArea"></div>
+
+          <div class="btn-row">
+            <button class="btn danger" id="hardResetBottom" type="button">Hard Reset / Try Again</button>
+            <a class="btn secondary" href="../index.html">Back to Hub</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="error-box" id="errorBox"></div>
 
     </main>
 
-    <p class="footer small">
+    <p class="small-note">
       Correct answer required to advance • Hint on miss • Explanation shown after correct answer
     </p>
 
   </div>
 
-  <script>
-    /*
-      ============================================================
-      QUESTION BANK — EDIT HERE
-      ============================================================
+<script>
+/* =========================================================
+   QUESTION BANK — CLEAN / EDITABLE
+   Edit question, choices, answer, hint, and explanation here.
+========================================================= */
+const QUESTIONS = [
+  {
+    "id": "G5-Q1",
+    "cs": "CS 14",
+    "question": "What helped the United States emerge as a world power in the early 1900s?",
+    "choices": [
+      "Overseas expansion and victory in the Spanish-American War",
+      "Complete isolation from world affairs",
+      "Elimination of the navy",
+      "Avoiding all foreign markets"
+    ],
+    "answer": "Overseas expansion and victory in the Spanish-American War",
+    "hint": "Think about Hawaii, the Spanish-American War, and Big Stick Diplomacy.",
+    "explanation": "Overseas expansion, a stronger navy, and U.S. victory in war helped increase American global power."
+  },
+  {
+    "id": "G5-Q2",
+    "cs": "CS 15",
+    "question": "Why did the United States reject membership in the League of Nations?",
+    "choices": [
+      "Many feared foreign entanglements after World War I",
+      "The League required the U.S. to give up all trade",
+      "The League banned diplomacy",
+      "The U.S. had not participated in World War I"
+    ],
+    "answer": "Many feared foreign entanglements after World War I",
+    "hint": "Think about isolationism after WWI.",
+    "explanation": "Debate over the Treaty of Versailles and fear of foreign commitments pushed the U.S. toward isolationism."
+  },
+  {
+    "id": "G5-Q3",
+    "cs": "CS 16",
+    "question": "What contributed to the Red Scare of 1919\u20131920?",
+    "choices": [
+      "Fear of communism and revolution after labor unrest",
+      "The end of immigration restrictions",
+      "A decline in nativism",
+      "Support for joining the League of Nations"
+    ],
+    "answer": "Fear of communism and revolution after labor unrest",
+    "hint": "The Russian Revolution influenced American fears.",
+    "explanation": "Communism in Russia, strikes, and violence led many Americans to fear radical revolution."
+  },
+  {
+    "id": "G5-Q4",
+    "cs": "CS 17",
+    "question": "Which innovation helped transform communication and culture in the 1920s?",
+    "choices": [
+      "Commercial radio broadcasts",
+      "Telegraph only",
+      "Steam-powered factories only",
+      "The cotton gin"
+    ],
+    "answer": "Commercial radio broadcasts",
+    "hint": "Think about mass media and shared culture.",
+    "explanation": "Radio, movies, newspapers, automobiles, and assembly lines reshaped daily life and culture in the 1920s."
+  },
+  {
+    "id": "G5-Q5",
+    "cs": "CS 18",
+    "question": "How did the Harlem Renaissance contribute to social change?",
+    "choices": [
+      "It celebrated African American culture and increased awareness of Black experiences",
+      "It ended all segregation immediately",
+      "It opposed jazz music",
+      "It reduced migration to northern cities"
+    ],
+    "answer": "It celebrated African American culture and increased awareness of Black experiences",
+    "hint": "Think about art, literature, and jazz.",
+    "explanation": "The Harlem Renaissance gave pride to African Americans and brought wider attention to Black culture and struggles."
+  },
+  {
+    "id": "G5-Q6",
+    "cs": "CS 18",
+    "question": "What was one effect of Prohibition?",
+    "choices": [
+      "Growth of speakeasies and organized crime",
+      "End of illegal alcohol sales",
+      "Immediate national agreement on alcohol laws",
+      "A decline in enforcement costs"
+    ],
+    "answer": "Growth of speakeasies and organized crime",
+    "hint": "Banning alcohol created illegal markets.",
+    "explanation": "Prohibition was difficult to enforce and contributed to speakeasies, bootlegging, and organized crime."
+  },
+  {
+    "id": "G5-Q7",
+    "cs": "CS 19",
+    "question": "Which factor helped cause the Great Depression?",
+    "choices": [
+      "Stock market speculation and buying on margin",
+      "Government elimination of consumer debt",
+      "A complete ban on bank lending",
+      "A decline in consumer credit before the crash"
+    ],
+    "answer": "Stock market speculation and buying on margin",
+    "hint": "Investors took risks with borrowed money.",
+    "explanation": "Speculation and margin buying helped inflate stock prices before the crash contributed to economic collapse."
+  },
+  {
+    "id": "G5-Q8",
+    "cs": "CS 19",
+    "question": "How did the New Deal change the role of the federal government?",
+    "choices": [
+      "It expanded federal responsibility for economic relief and regulation",
+      "It eliminated all government programs",
+      "It ended bank regulation",
+      "It reduced federal involvement in the economy"
+    ],
+    "answer": "It expanded federal responsibility for economic relief and regulation",
+    "hint": "Think Social Security, FDIC, SEC, and public works.",
+    "explanation": "New Deal programs expanded the federal role in relief, recovery, reform, banking, employment, and social welfare."
+  },
+  {
+    "id": "G5-Q9",
+    "cs": "CS 20",
+    "question": "What event ended U.S. isolationist policy and brought the nation into World War II?",
+    "choices": [
+      "Bombing of Pearl Harbor",
+      "Signing of the Kellogg-Briand Pact",
+      "Senate rejection of the Treaty of Versailles",
+      "The Harlem Renaissance"
+    ],
+    "answer": "Bombing of Pearl Harbor",
+    "hint": "This attack occurred on December 7, 1941.",
+    "explanation": "Japan\u2019s attack on Pearl Harbor ended U.S. isolation and led to entry into World War II."
+  }
+];
 
-      To edit a question:
-      1. Change the question text.
-      2. Change any choice text.
-      3. Set answer to "A", "B", "C", or "D".
-      4. Keep each game at 9 questions.
-      5. Hints should guide students without revealing the answer.
-      6. Explanations appear after a correct answer and linger about 5 seconds.
-    */
+/* =========================================================
+   GAME ENGINE — DO NOT EDIT UNLESS CHANGING BEHAVIOR
+========================================================= */
+const GAME_TITLE = "Game 5 — World Wars & Interwar Period";
+const STORAGE_KEY = "amstud-bellringer-set-a-game-5";
 
-    const GAME = {
-  "title": "Game 5 — World Wars & Interwar Period",
-  "subtitle": "Imperialism, WWI, 1920s, Great Depression, New Deal, WWII",
-  "cs": "CS 14–21",
-  "key": "amstud_bellringer_set_a_game_5",
-  "questions": [
-    {
-      "id": "G5N1",
-      "question": "Which event helped the United States emerge as a world power in the early 1900s?",
-      "choices": [
-        "Spanish-American War",
-        "Whiskey Rebellion",
-        "Shays’ Rebellion",
-        "Nullification Crisis"
-      ],
-      "answer": "A",
-      "explanation": "The Spanish-American War gave the United States overseas influence and marked a turning point toward global power status.",
-      "cs": "CS 14",
-      "efl": "Analyze U.S. emergence as a world power",
-      "hint": "Look for the overseas conflict connected to expansion and empire."
-    },
-    {
-      "id": "G5N2",
-      "question": "Why did the U.S. Senate reject joining the League of Nations after World War I?",
-      "choices": [
-        "Many senators feared foreign entanglements and loss of independence in decision-making",
-        "The League required the United States to give up all trade",
-        "The League supported German rearmament",
-        "The Senate wanted to continue fighting World War I"
-      ],
-      "answer": "A",
-      "explanation": "Debate over the Treaty of Versailles and the League of Nations reflected a desire to avoid foreign entanglements, moving the United States toward limited international involvement.",
-      "cs": "CS 15",
-      "efl": "Explain post-WWI isolationism",
-      "hint": "Think about the national debate over avoiding future foreign conflicts."
-    },
-    {
-      "id": "Q59",
-      "question": "What was one effect of the 1920s Red Scare?",
-      "choices": [
-        "Increased support for free speech",
-        "Deportation of suspected radicals",
-        "Decline of immigration restrictions",
-        "End of labor disputes"
-      ],
-      "answer": "B",
-      "explanation": "Fear of communism led the government to target labor activists and immigrants viewed as political threats. The Red Scare resulted in arrests, deportations, and violations of civil liberties during a time of national anxiety. FRIDAY (1 MCQ) Content: CS 26 — 1960s/70s Movements",
-      "cs": "CS 16",
-      "efl": "Describe Red Scare social unrest",
-      "hint": "Fear of communism and labor unrest led to suspicion and restrictions."
-    },
-    {
-      "id": "G5N3",
-      "question": "How did the assembly line change American industry in the 1920s?",
-      "choices": [
-        "It slowed production and raised prices",
-        "It made mass production faster and goods more affordable",
-        "It ended consumer culture",
-        "It eliminated all factory jobs"
-      ],
-      "answer": "B",
-      "explanation": "Assembly-line production increased efficiency and lowered costs, helping expand consumer goods such as automobiles.",
-      "cs": "CS 17",
-      "efl": "Describe technology and cultural change",
-      "hint": "The assembly line is connected to mass production."
-    },
-    {
-      "id": "G5N4",
-      "question": "What was a major cultural contribution of the Harlem Renaissance?",
-      "choices": [
-        "It celebrated African American art, literature, and music",
-        "It ended Jim Crow laws immediately",
-        "It reduced migration to northern cities",
-        "It promoted isolationism"
-      ],
-      "answer": "A",
-      "explanation": "The Harlem Renaissance celebrated African American culture through literature, art, and jazz while increasing awareness of struggles against intolerance.",
-      "cs": "CS 18",
-      "efl": "Describe social changes from the Harlem Renaissance",
-      "hint": "Look for African American cultural pride and expression."
-    },
-    {
-      "id": "G5N5",
-      "question": "Which factor helped cause the Great Depression?",
-      "choices": [
-        "Stock market speculation and buying on margin",
-        "A sudden shortage of consumer debt",
-        "Complete elimination of bank lending",
-        "A decline in all factory production during the 1920s"
-      ],
-      "answer": "A",
-      "explanation": "Speculation and buying on margin made the economy unstable. When the market collapsed, many investors lost fortunes and debt problems worsened.",
-      "cs": "CS 19",
-      "efl": "Describe causes of the Great Depression",
-      "hint": "Buying stocks with borrowed money is the key clue."
-    },
-    {
-      "id": "G5N6",
-      "question": "How did New Deal programs change the role of the federal government?",
-      "choices": [
-        "They reduced federal involvement in the economy",
-        "They expanded federal responsibility for relief, recovery, and regulation",
-        "They ended all public works programs",
-        "They eliminated banking regulation"
-      ],
-      "answer": "B",
-      "explanation": "New Deal agencies and laws expanded federal responsibility for economic relief, public works, banking regulation, and social welfare.",
-      "cs": "CS 19",
-      "efl": "Explain expanded federal role during the Great Depression",
-      "hint": "The New Deal increased federal action rather than reducing it."
-    },
-    {
-      "id": "G5N7",
-      "question": "Which policy showed the United States moving away from strict neutrality before entering World War II?",
-      "choices": [
-        "Lend-Lease Act",
-        "Kellogg-Briand Pact",
-        "Dawes Act",
-        "Chinese Exclusion Act"
-      ],
-      "answer": "A",
-      "explanation": "The Lend-Lease Act allowed the United States to aid nations fighting fascist aggression, showing a shift away from strict isolation before Pearl Harbor.",
-      "cs": "CS 20",
-      "efl": "Explain transition from isolationism to WWII involvement",
-      "hint": "Look for aid to countries fighting Axis aggression."
-    },
-    {
-      "id": "G5N8",
-      "question": "What was one effect of World War II mobilization on American society?",
-      "choices": [
-        "Women and minorities took on important wartime roles despite discrimination",
-        "The federal government ended wartime production",
-        "Factories stopped producing military goods",
-        "The United States returned to complete isolationism"
-      ],
-      "answer": "A",
-      "explanation": "World War II mobilization pulled women and marginalized groups into important industrial and military support roles, even while discrimination continued.",
-      "cs": "CS 21",
-      "efl": "Explain how WWII mobilization affected American society",
-      "hint": "Mobilization means the home front and military economy expanded rapidly."
-    }
-  ]
+let state = {
+  studentName: "",
+  index: 0,
+  misses: 0,
+  missedIds: [],
+  startedAt: null,
+  endedAt: null,
+  timerId: null
 };
 
-    /*
-      ============================================================
-      GAME ENGINE — DO NOT EDIT UNLESS CHANGING GAME BEHAVIOR
-      ============================================================
-    */
+const $ = (id) => document.getElementById(id);
 
-    const $ = (id) => document.getElementById(id);
+window.addEventListener("error", function(event) {
+  showError(event.message + "\\n" + event.filename + ":" + event.lineno);
+});
 
-    let order = [];
-    let idx = 0;
-    let misses = 0;
-    let attempts = 0;
-    let startMs = null;
-    let timer = null;
-    let student = "";
-    let locked = false;
+document.addEventListener("DOMContentLoaded", function() {
+  $("startBtn").addEventListener("click", startGame);
+  $("hardResetTop").addEventListener("click", hardReset);
+  $("hardResetBottom").addEventListener("click", hardReset);
 
-    function showError(message) {
-      $("errorBox").classList.remove("hide");
-      $("errorBox").textContent = message;
-    }
+  $("studentName").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") startGame();
+  });
 
-    window.addEventListener("error", (event) => {
-      showError("Game error: " + event.message);
+  loadSavedAttempt();
+});
+
+function showError(message) {
+  const box = $("errorBox");
+  box.style.display = "block";
+  box.textContent = "Error caught:\\n" + message;
+}
+
+function saveState() {
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+    studentName: state.studentName,
+    index: state.index,
+    misses: state.misses,
+    missedIds: state.missedIds,
+    startedAt: state.startedAt
+  }));
+}
+
+function loadSavedAttempt() {
+  const raw = sessionStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+
+  try {
+    const saved = JSON.parse(raw);
+    if (!saved || !saved.studentName) return;
+
+    state.studentName = saved.studentName;
+    state.index = saved.index || 0;
+    state.misses = saved.misses || 0;
+    state.missedIds = saved.missedIds || [];
+    state.startedAt = saved.startedAt || new Date().toISOString();
+
+    showScreen("gameScreen");
+    startTimer();
+    renderQuestion();
+  } catch (error) {
+    showError(error.message);
+  }
+}
+
+function startGame() {
+  const name = $("studentName").value.trim();
+
+  if (!name) {
+    alert("Enter your first and last name before starting.");
+    return;
+  }
+
+  state.studentName = name;
+  state.index = 0;
+  state.misses = 0;
+  state.missedIds = [];
+  state.startedAt = new Date().toISOString();
+  state.endedAt = null;
+
+  saveState();
+  showScreen("gameScreen");
+  startTimer();
+  renderQuestion();
+}
+
+function showScreen(screenId) {
+  document.querySelectorAll(".screen").forEach(function(screen) {
+    screen.classList.remove("active");
+  });
+  $(screenId).classList.add("active");
+}
+
+function startTimer() {
+  if (state.timerId) clearInterval(state.timerId);
+
+  state.timerId = setInterval(function() {
+    const elapsed = elapsedSeconds();
+    $("timerText").textContent = formatSeconds(elapsed);
+  }, 1000);
+}
+
+function elapsedSeconds() {
+  if (!state.startedAt) return 0;
+  return Math.max(0, Math.floor((Date.now() - new Date(state.startedAt).getTime()) / 1000));
+}
+
+function formatSeconds(totalSeconds) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return minutes + ":" + String(seconds).padStart(2, "0");
+}
+
+function formatClock(isoString) {
+  return new Date(isoString).toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit"
+  });
+}
+
+function formatDate(isoString) {
+  return new Date(isoString).toLocaleDateString();
+}
+
+function currentAccuracy() {
+  const uniqueMisses = new Set(state.missedIds).size;
+  const correctFirstTry = Math.max(0, QUESTIONS.length - uniqueMisses);
+  return Math.round((correctFirstTry / QUESTIONS.length) * 100);
+}
+
+function renderHud() {
+  $("progressText").textContent = Math.min(state.index + 1, QUESTIONS.length) + " / " + QUESTIONS.length;
+  $("accuracyText").textContent = currentAccuracy() + "%";
+  $("missesText").textContent = state.misses;
+  $("timerText").textContent = formatSeconds(elapsedSeconds());
+}
+
+function renderQuestion() {
+  if (state.index >= QUESTIONS.length) {
+    finishGame();
+    return;
+  }
+
+  renderHud();
+
+  const q = QUESTIONS[state.index];
+  $("questionMeta").textContent = q.id + " • " + q.cs;
+  $("questionText").textContent = q.question;
+  $("feedback").className = "feedback";
+  $("feedback").textContent = "Select the best answer. The game auto-submits on click.";
+
+  const choices = $("choices");
+  choices.innerHTML = "";
+
+  q.choices.forEach(function(choiceText) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "choice";
+    button.textContent = choiceText;
+    button.addEventListener("click", function() {
+      submitChoice(button, choiceText);
+    });
+    choices.appendChild(button);
+  });
+}
+
+function submitChoice(button, choiceText) {
+  const q = QUESTIONS[state.index];
+  const allChoices = Array.from(document.querySelectorAll(".choice"));
+
+  if (choiceText === q.answer) {
+    button.classList.add("correct");
+    allChoices.forEach(function(choice) {
+      choice.disabled = true;
     });
 
-    window.addEventListener("unhandledrejection", (event) => {
-      const reason = event.reason?.message || event.reason;
-      showError("Game promise error: " + reason);
-    });
+    $("feedback").className = "feedback good";
+    $("feedback").innerHTML = "<strong>Correct.</strong><br>" + q.explanation;
 
-    function pad(number) {
-      return String(number).padStart(2, "0");
+    setTimeout(function() {
+      state.index += 1;
+      saveState();
+      renderQuestion();
+    }, 5000);
+
+  } else {
+    button.classList.add("incorrect");
+    button.disabled = true;
+
+    state.misses += 1;
+    if (!state.missedIds.includes(q.id)) {
+      state.missedIds.push(q.id);
     }
 
-    function timeStr(date) {
-      return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-    }
+    saveState();
+    renderHud();
 
-    function elapsed() {
-      const seconds = Math.floor((Date.now() - startMs) / 1000);
-      return `${Math.floor(seconds / 60)}:${pad(seconds % 60)}`;
-    }
+    $("feedback").className = "feedback warn";
+    $("feedback").innerHTML = "<strong>Hint:</strong> " + q.hint + "<br><br>Choose again. Correct answer required to advance.";
+  }
+}
 
-    function accuracy() {
-      if (!attempts) return 100;
-      return Math.round(((attempts - misses) / attempts) * 100);
-    }
+function finishGame() {
+  if (state.timerId) clearInterval(state.timerId);
 
-    function hardReset() {
-      try {
-        sessionStorage.removeItem(GAME.key);
-        localStorage.removeItem(GAME.key);
-      } catch (error) {
-        console.warn("Storage clear skipped:", error);
-      }
+  state.endedAt = new Date().toISOString();
 
-      location.reload();
-    }
+  showScreen("finishScreen");
 
-    function startGame() {
-      student = $("studentName").value.trim();
+  const elapsed = formatSeconds(Math.floor((new Date(state.endedAt).getTime() - new Date(state.startedAt).getTime()) / 1000));
+  const accuracy = currentAccuracy();
 
-      if (!student) {
-        showError("Enter your name to begin.");
-        return;
-      }
+  $("finishSummary").textContent = "Name: " + state.studentName + " • Accuracy: " + accuracy + "% • Misses: " + state.misses + " • Runtime: " + elapsed;
 
-      $("startPanel").classList.add("hide");
-      $("gamePanel").classList.remove("hide");
+  const ticketArea = $("ticketArea");
+  ticketArea.innerHTML = "";
 
-      startMs = Date.now();
-      order = GAME.questions.map((_, index) => index);
-      idx = 0;
-      misses = 0;
-      attempts = 0;
+  if (state.misses === 0) {
+    $("finishTitle").textContent = "Perfect Run Complete";
 
-      timer = setInterval(updateHud, 500);
-
-      render();
-    }
-
-    function updateHud() {
-      $("progress").textContent = `${Math.min(idx + 1, GAME.questions.length)} / ${GAME.questions.length}`;
-      $("acc").textContent = accuracy() + "%";
-      $("misses").textContent = misses;
-      $("timer").textContent = startMs ? elapsed() : "0:00";
-    }
-
-    function render() {
-      locked = false;
-      updateHud();
-
-      const question = GAME.questions[order[idx]];
-
-      $("qText").textContent = question.question;
-      $("csLine").textContent = question.cs + " • " + question.efl;
-      $("feedback").innerHTML =
-        "Choose the best answer. Incorrect choices give a hint but do not reveal the answer.";
-
-      const choicesBox = $("choices");
-      choicesBox.innerHTML = "";
-
-      const letters = ["A", "B", "C", "D"];
-
-      question.choices.forEach((choiceText, index) => {
-        const button = document.createElement("button");
-        button.className = "choice";
-        button.innerHTML = `<b>${letters[index]}.</b> ${choiceText}`;
-        button.onclick = () => choose(index, button);
-        choicesBox.appendChild(button);
-      });
-    }
-
-    function choose(index, button) {
-      if (locked) return;
-
-      const question = GAME.questions[order[idx]];
-      const chosen = "ABCD"[index];
-
-      attempts++;
-
-      if (chosen === question.answer) {
-        locked = true;
-        button.classList.add("correct");
-
-        $("feedback").innerHTML = "<b>Correct.</b><br>" + question.explanation;
-
-        updateHud();
-
-        setTimeout(() => {
-          idx++;
-
-          if (idx >= GAME.questions.length) {
-            finish();
-          } else {
-            render();
-          }
-        }, 5000);
-
-      } else {
-        misses++;
-        button.classList.add("incorrect");
-        button.disabled = true;
-
-        $("feedback").innerHTML = "<b>Not yet.</b> Hint: " + question.hint;
-
-        updateHud();
-      }
-    }
-
-    function finish() {
-      clearInterval(timer);
-
-      $("gamePanel").classList.add("hide");
-      $("finishPanel").classList.remove("hide");
-
-      const end = new Date();
-      const perfectRun = misses === 0;
-
-      $("finishTitle").textContent = perfectRun
-        ? "Perfect Run — Submit Ticket"
-        : "Mastery required — restart";
-
-      $("finishMsg").textContent = perfectRun
-        ? "Show this ticket to your teacher."
-        : "No ticket generated. Restart and complete a perfect run.";
-
-      const ticket = $("ticket");
-      ticket.className = perfectRun ? "ticket" : "ticket danger";
-
-      if (perfectRun) {
-        ticket.innerHTML = `
-          <h2>Submit Ticket</h2>
-
-          <div class="ticket-grid">
-            <div>
-              <span class="label">Student</span>
-              <b>${student}</b>
-            </div>
-
-            <div>
-              <span class="label">Date</span>
-              <b>${end.toLocaleDateString()}</b>
-            </div>
-
-            <div>
-              <span class="label">Start Time</span>
-              <b>${timeStr(new Date(startMs))}</b>
-            </div>
-
-            <div>
-              <span class="label">End Time</span>
-              <b>${timeStr(end)}</b>
-            </div>
-
-            <div>
-              <span class="label">Runtime</span>
-              <b>${elapsed()}</b>
-            </div>
-
-            <div>
-              <span class="label">Accuracy</span>
-              <b>${accuracy()}%</b>
-            </div>
-
-            <div>
-              <span class="label">Misses</span>
-              <b>${misses}</b>
-            </div>
-
-            <div>
-              <span class="label">Result</span>
-              <b>Perfect Run</b>
-            </div>
+    ticketArea.innerHTML = `
+      <div class="ticket">
+        <h3>Submit Ticket — Perfect Run</h3>
+        <div class="ticket-grid">
+          <div class="ticket-item">
+            <div class="ticket-label">Student Name</div>
+            <div class="ticket-value">${escapeHtml(state.studentName)}</div>
           </div>
-        `;
-      } else {
-        ticket.innerHTML = `
-          <h2>Mastery required — restart</h2>
-          <p>You must finish with 0 misses to generate a submit ticket.</p>
-        `;
-      }
-    }
+          <div class="ticket-item">
+            <div class="ticket-label">Date</div>
+            <div class="ticket-value">${formatDate(state.endedAt)}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Start Time</div>
+            <div class="ticket-value">${formatClock(state.startedAt)}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">End Time</div>
+            <div class="ticket-value">${formatClock(state.endedAt)}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Runtime</div>
+            <div class="ticket-value">${elapsed}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Accuracy</div>
+            <div class="ticket-value">${accuracy}%</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Misses</div>
+            <div class="ticket-value">${state.misses}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Result</div>
+            <div class="ticket-value">Perfect Run</div>
+          </div>
+        </div>
+      </div>
+    `;
+  } else {
+    $("finishTitle").textContent = "Mastery Required";
+    ticketArea.innerHTML = `
+      <div class="mastery-message">
+        Mastery required — restart
+      </div>
+    `;
+  }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      $("gameTitle").textContent = GAME.title;
-      $("gameSub").textContent = GAME.subtitle;
-      $("gameMeta").textContent = GAME.cs + " • 9 Questions • Perfect Run Required";
+  sessionStorage.removeItem(STORAGE_KEY);
+}
 
-      $("startBtn").onclick = startGame;
-      $("resetBtn").onclick = hardReset;
-      $("resetBtn2").onclick = hardReset;
-    });
-  </script>
+function hardReset() {
+  sessionStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+</script>
 </body>
 </html>
