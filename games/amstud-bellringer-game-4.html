@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Game 4 — Industrialization & Progressive Era</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Game 4 — Industrialization & Progressive Era — Legend Mastery Series</title>
   <link rel="stylesheet" href="../styles.css" />
 </head>
 
@@ -12,484 +12,518 @@
 
     <div class="topbar">
       <a class="btn secondary" href="../index.html">← Back to Hub</a>
-      <button id="resetBtn" class="secondary">Hard Reset</button>
+      <button class="btn danger" id="hardResetTop" type="button">Hard Reset</button>
     </div>
 
     <header class="hero">
       <div class="kicker">Legend Mastery Series • American Studies Bellringer Set A</div>
-      <h1 id="gameTitle">Game</h1>
-      <p id="gameSub" class="sub"></p>
-
+      <h1>Game 4 — Industrialization & Progressive Era</h1>
+      <p class="sub">Corporations, Labor, Immigration, Urbanization, Progressivism</p>
       <div class="pills">
-        <span id="gameMeta" class="pill"></span>
-        <span class="pill">Auto-Submit</span>
+        <span class="pill">CS 8–13</span>
+        <span class="pill">9 Questions</span>
+        <span class="pill">Perfect Run Required</span>
+        <span class="pill">Auto-Submit on Click</span>
         <span class="pill">No Ticket Unless Perfect</span>
       </div>
     </header>
 
-    <main class="game-shell" style="margin-top: 20px;">
+    <main class="game-shell">
 
-      <section id="startPanel" class="start">
-        <h2>Name Entry Required</h2>
-        <p class="muted">
-          Enter your name, then complete all 9 questions. One miss means no ticket.
-          You must restart for a perfect run.
-        </p>
+      <section id="startScreen" class="screen active">
+        <div class="name-card">
+          <h2>Name Entry Required</h2>
+          <p class="muted">
+            Enter your first and last name, then complete all 9 questions.
+            One miss means no ticket. You must restart for a perfect run.
+          </p>
 
-        <input
-          id="studentName"
-          class="input"
-          placeholder="First and last name"
-          autocomplete="name"
-        />
-
-        <button id="startBtn">Start Game</button>
+          <div class="field-row">
+            <input id="studentName" type="text" placeholder="First and last name" autocomplete="off" />
+            <button class="btn" id="startBtn" type="button">Start Game</button>
+          </div>
+        </div>
       </section>
 
-      <section id="gamePanel" class="hide">
+      <section id="gameScreen" class="screen">
         <div class="hud">
-          <div>
-            <span class="label">Progress</span>
-            <b id="progress">1 / 9</b>
+          <div class="hud-box">
+            <div class="hud-label">Progress</div>
+            <div class="hud-value" id="progressText">1 / 9</div>
           </div>
-
-          <div>
-            <span class="label">Accuracy</span>
-            <b id="acc">100%</b>
+          <div class="hud-box">
+            <div class="hud-label">Accuracy</div>
+            <div class="hud-value" id="accuracyText">100%</div>
           </div>
-
-          <div>
-            <span class="label">Misses</span>
-            <b id="misses">0</b>
+          <div class="hud-box">
+            <div class="hud-label">Misses</div>
+            <div class="hud-value" id="missesText">0</div>
           </div>
-
-          <div>
-            <span class="label">Timer</span>
-            <b id="timer">0:00</b>
+          <div class="hud-box">
+            <div class="hud-label">Timer</div>
+            <div class="hud-value" id="timerText">0:00</div>
           </div>
         </div>
 
-        <p id="csLine" class="muted small"></p>
-        <div id="qText" class="question"></div>
-        <div id="choices" class="choices"></div>
-        <div id="feedback" class="feedback"></div>
-      </section>
-
-      <section id="finishPanel" class="hide">
-        <h2 id="finishTitle"></h2>
-        <p id="finishMsg" class="muted"></p>
-
-        <div id="ticket"></div>
-
-        <div class="btn-row">
-          <button id="resetBtn2">Hard Reset / Try Again</button>
-          <a class="btn secondary" href="../index.html">Back to Hub</a>
+        <div class="question-card">
+          <div class="question-meta" id="questionMeta"></div>
+          <h2 class="question" id="questionText"></h2>
+          <div class="choices" id="choices"></div>
+          <div class="feedback" id="feedback">
+            Select the best answer. The game auto-submits on click.
+          </div>
         </div>
       </section>
 
-      <div id="errorBox" class="errorbox hide"></div>
+      <section id="finishScreen" class="screen">
+        <div class="finish-card">
+          <h2 id="finishTitle">Finished</h2>
+          <p class="muted" id="finishSummary"></p>
+
+          <div id="ticketArea"></div>
+
+          <div class="btn-row">
+            <button class="btn danger" id="hardResetBottom" type="button">Hard Reset / Try Again</button>
+            <a class="btn secondary" href="../index.html">Back to Hub</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="error-box" id="errorBox"></div>
 
     </main>
 
-    <p class="footer small">
+    <p class="small-note">
       Correct answer required to advance • Hint on miss • Explanation shown after correct answer
     </p>
 
   </div>
 
-  <script>
-    /*
-      ============================================================
-      QUESTION BANK — EDIT HERE
-      ============================================================
+<script>
+/* =========================================================
+   QUESTION BANK — CLEAN / EDITABLE
+   Edit question, choices, answer, hint, and explanation here.
+========================================================= */
+const QUESTIONS = [
+  {
+    "id": "G4-Q1",
+    "cs": "CS 8",
+    "question": "What was a major effect of industrialization on American cities in the late 1800s?",
+    "choices": [
+      "Urban populations declined",
+      "Cities grew rapidly as people moved for factory jobs",
+      "Agricultural production disappeared",
+      "Immigration stopped"
+    ],
+    "answer": "Cities grew rapidly as people moved for factory jobs",
+    "hint": "Factory jobs pulled people into cities.",
+    "explanation": "Industrialization drew immigrants and rural Americans into cities, creating rapid urban growth."
+  },
+  {
+    "id": "G4-Q2",
+    "cs": "CS 8",
+    "question": "How did the Bessemer process affect the U.S. economy?",
+    "choices": [
+      "It made steel cheaper and increased industrial growth",
+      "It limited steel production",
+      "It reduced the need for railroads",
+      "It stopped skyscraper construction"
+    ],
+    "answer": "It made steel cheaper and increased industrial growth",
+    "hint": "Steel was central to railroads and buildings.",
+    "explanation": "Cheaper steel fueled railroads, construction, machinery, and industrial expansion."
+  },
+  {
+    "id": "G4-Q3",
+    "cs": "CS 8",
+    "question": "What was one effect of mechanization on farming?",
+    "choices": [
+      "Increased need for manual labor",
+      "More efficient crop production with fewer workers",
+      "Decline in crop production",
+      "End of farm machinery"
+    ],
+    "answer": "More efficient crop production with fewer workers",
+    "hint": "Machines changed labor needs.",
+    "explanation": "Mechanized farming increased output while reducing the number of workers needed on farms."
+  },
+  {
+    "id": "G4-Q4",
+    "cs": "CS 9",
+    "question": "Why did labor unions grow during industrialization?",
+    "choices": [
+      "Workers faced unsafe conditions, long hours, and low pay",
+      "Factories offered high wages to all workers",
+      "Corporations banned all competition",
+      "The government ended all strikes"
+    ],
+    "answer": "Workers faced unsafe conditions, long hours, and low pay",
+    "hint": "Think about what unions wanted to reform.",
+    "explanation": "Labor unions formed to fight for better pay, shorter hours, safer conditions, and restrictions on child labor."
+  },
+  {
+    "id": "G4-Q5",
+    "cs": "CS 9",
+    "question": "Which tactic did labor unions use to pressure employers?",
+    "choices": [
+      "Collective bargaining",
+      "Imperialism",
+      "Isolationism",
+      "Open Door Policy"
+    ],
+    "answer": "Collective bargaining",
+    "hint": "This involves workers negotiating as a group.",
+    "explanation": "Unions used collective bargaining, strikes, and boycotts to push for workplace reforms."
+  },
+  {
+    "id": "G4-Q6",
+    "cs": "CS 10",
+    "question": "Why did many immigrants settle in ethnic neighborhoods?",
+    "choices": [
+      "To avoid factory jobs",
+      "To access support networks with similar languages and traditions",
+      "To reduce trade",
+      "To limit transportation options"
+    ],
+    "answer": "To access support networks with similar languages and traditions",
+    "hint": "Newcomers often needed familiar support systems.",
+    "explanation": "Ethnic neighborhoods helped immigrants find jobs, housing, language support, and cultural stability."
+  },
+  {
+    "id": "G4-Q7",
+    "cs": "CS 10",
+    "question": "What was one problem caused by rapid urbanization?",
+    "choices": [
+      "Overcrowded tenements and unsanitary conditions",
+      "Decline in population density",
+      "More spacious housing for workers",
+      "End of industrial jobs"
+    ],
+    "answer": "Overcrowded tenements and unsanitary conditions",
+    "hint": "Cities grew faster than infrastructure.",
+    "explanation": "Rapid urban growth caused overcrowding, poor sanitation, disease, and unsafe housing."
+  },
+  {
+    "id": "G4-Q8",
+    "cs": "CS 12",
+    "question": "How was racial discrimination institutionalized after Reconstruction?",
+    "choices": [
+      "Jim Crow laws enforced segregation and limited rights",
+      "The 15th Amendment was repealed",
+      "Federal troops expanded Reconstruction",
+      "The Supreme Court banned segregation in Plessy"
+    ],
+    "answer": "Jim Crow laws enforced segregation and limited rights",
+    "hint": "Think of laws and local ordinances in the South.",
+    "explanation": "Jim Crow laws created segregation, limited ballot access, and restricted civil rights for African Americans."
+  },
+  {
+    "id": "G4-Q9",
+    "cs": "CS 13",
+    "question": "What was a major purpose of Progressive Era reforms?",
+    "choices": [
+      "Increase monopolies",
+      "Address problems caused by industrialization, urbanization, and political corruption",
+      "Expand laissez-faire policies only",
+      "Limit public education"
+    ],
+    "answer": "Address problems caused by industrialization, urbanization, and political corruption",
+    "hint": "Progressives wanted reform, not laissez-faire neglect.",
+    "explanation": "Progressives used laws and government action to address corporate power, unsafe products, urban problems, and political corruption."
+  }
+];
 
-      To edit a question:
-      1. Change the question text.
-      2. Change any choice text.
-      3. Set answer to "A", "B", "C", or "D".
-      4. Keep each game at 9 questions.
-      5. Hints should guide students without revealing the answer.
-      6. Explanations appear after a correct answer and linger about 5 seconds.
-    */
+/* =========================================================
+   GAME ENGINE — DO NOT EDIT UNLESS CHANGING BEHAVIOR
+========================================================= */
+const GAME_TITLE = "Game 4 — Industrialization & Progressive Era";
+const STORAGE_KEY = "amstud-bellringer-set-a-game-4";
 
-    const GAME = {
-  "title": "Game 4 — Industrialization & Progressive Era",
-  "subtitle": "Corporations, Labor, Immigration, Urbanization, Progressivism",
-  "cs": "CS 8–13",
-  "key": "amstud_bellringer_set_a_game_4",
-  "questions": [
-    {
-      "id": "Q37",
-      "question": "What was a major effect of industrialization on American cities in the late 1800s?",
-      "choices": [
-        "Urban populations declined",
-        "Cities grew rapidly as people moved for factory jobs",
-        "Agricultural production increased",
-        "Immigration stopped"
-      ],
-      "answer": "B",
-      "explanation": "Industrialization created millions of factory jobs that drew both immigrants and rural Americans into urban centers. This rapid growth led to overcrowding, tenements, and new social challenges, transforming the nation’s demographics.",
-      "cs": "CS 8",
-      "efl": "Analyze effects of industrialization",
-      "hint": "Factory jobs pulled people into cities."
-    },
-    {
-      "id": "Q38",
-      "question": "How did the invention of the Bessemer process affect the U.S. economy?",
-      "choices": [
-        "It limited steel production",
-        "It made steel cheaper and increased industrial growth",
-        "It reduced the need for railroads",
-        "It slowed the construction of skyscrapers"
-      ],
-      "answer": "B",
-      "explanation": "The Bessemer process allowed steel to be mass-produced more quickly and cheaply. Affordable steel fueled expansion in railroads, construction, and manufacturing, helping the United States become a leading industrial nation.",
-      "cs": "CS 8",
-      "efl": "Analyze technological innovation and heavy industry",
-      "hint": "Cheaper steel fueled railroads, skyscrapers, and manufacturing."
-    },
-    {
-      "id": "Q39",
-      "question": "What was one effect of the growth of railroad networks during industrialization?",
-      "choices": [
-        "Decline in national markets",
-        "Slower transportation of goods",
-        "Expansion of nationwide trade",
-        "Collapse of cities"
-      ],
-      "answer": "C",
-      "explanation": "Railroads linked distant regions, making it possible to ship goods quickly and cheaply across the country. This created national markets, encouraged specialization, and supported the rise of large corporations. WEDNESDAY (2 MCQs) Content: CS 13 + OST Recall",
-      "cs": "CS 8",
-      "efl": "Analyze railroads and national markets",
-      "hint": "Railroads connected regions and expanded trade."
-    },
-    {
-      "id": "Q40",
-      "question": "Why did many immigrants settle in ethnic neighborhoods such as Little Italy or Chinatown?",
-      "choices": [
-        "To avoid factory jobs",
-        "To access support networks among people with similar languages and traditions",
-        "To reduce trade",
-        "To limit transportation options"
-      ],
-      "answer": "B",
-      "explanation": "Ethnic neighborhoods offered social connections, familiar customs, and mutual support for newcomers adjusting to life in the United States. These communities helped immigrants find housing, work, and cultural stability.",
-      "cs": "CS 10",
-      "efl": "Analyze immigration and ethnic neighborhoods",
-      "hint": "Immigrant neighborhoods offered support through language, culture, and jobs."
-    },
-    {
-      "id": "Q41",
-      "question": "What was one problem caused by rapid urbanization?",
-      "choices": [
-        "Decrease in population density",
-        "Rise of spacious housing",
-        "Overcrowded tenements and unsanitary conditions",
-        "Decline of industrial jobs"
-      ],
-      "answer": "C",
-      "explanation": "As cities expanded faster than infrastructure could support, immigrants and workers were forced into overcrowded, poorly ventilated tenements. These conditions spread diseases and underscored the need for urban reforms. FRIDAY (1 MCQ) Content: CS 13 — Industrialization Impacts",
-      "cs": "CS 10",
-      "efl": "Analyze urbanization problems",
-      "hint": "Rapid urban growth often meant overcrowding and poor sanitation."
-    },
-    {
-      "id": "Q42",
-      "question": "What was a major effect of mechanization on farming?",
-      "choices": [
-        "Increased need for manual labor",
-        "Decreased agricultural production",
-        "More efficient crop production with fewer workers",
-        "Decline in crop exports"
-      ],
-      "answer": "C",
-      "explanation": "Advances in machinery such as reapers and tractors reduced the number of workers needed while increasing output. This pushed many rural Americans toward cities and contributed to long-term migration patterns.",
-      "cs": "CS 8",
-      "efl": "Analyze mechanized farming",
-      "hint": "Machines increased output while reducing labor needs."
-    },
-    {
-      "id": "Q86",
-      "question": "What was a major purpose of Progressive Era reforms?",
-      "choices": [
-        "Increase monopolies",
-        "Address problems caused by industrialization",
-        "Expand laissez-faire policies",
-        "Limit public education"
-      ],
-      "answer": "B",
-      "explanation": "Progressives sought to reduce corruption, improve working conditions, regulate big business, and address issues like poverty and unsafe housing created by rapid industrialization.",
-      "cs": "CS 13",
-      "efl": "Analyze Progressive Era reforms",
-      "hint": "Progressives targeted problems caused by industrial capitalism and urbanization."
-    },
-    {
-      "id": "Q91",
-      "question": "What was one reason factories hired child labor during industrialization?",
-      "choices": [
-        "Children demanded high wages",
-        "Children lacked the physical ability to work",
-        "Children could be paid less and fit into small spaces",
-        "Government encouraged child labor"
-      ],
-      "answer": "C",
-      "explanation": "Factory owners exploited children for dangerous, low-wage work. Their small size suited tasks in mines and mills, highlighting the need for Progressive Era workplace reforms.",
-      "cs": "CS 9",
-      "efl": "Explain labor problems and child labor",
-      "hint": "Factory owners used children because they could be paid less."
-    },
-    {
-      "id": "Q92",
-      "question": "What was one purpose of the Chinese Exclusion Act?",
-      "choices": [
-        "Encourage immigration from Asia",
-        "Ban Chinese labor immigration due to economic competition",
-        "Grant citizenship to Chinese immigrants",
-        "Expand trade with China"
-      ],
-      "answer": "B",
-      "explanation": "Rising job competition and racial prejudice led Congress to ban Chinese labor immigration. This was the first major federal law restricting immigration by nationality or ethnicity.",
-      "cs": "CS 10",
-      "efl": "Analyze nativism and immigration restriction",
-      "hint": "The Chinese Exclusion Act is tied to nativism and labor competition."
-    }
-  ]
+let state = {
+  studentName: "",
+  index: 0,
+  misses: 0,
+  missedIds: [],
+  startedAt: null,
+  endedAt: null,
+  timerId: null
 };
 
-    /*
-      ============================================================
-      GAME ENGINE — DO NOT EDIT UNLESS CHANGING GAME BEHAVIOR
-      ============================================================
-    */
+const $ = (id) => document.getElementById(id);
 
-    const $ = (id) => document.getElementById(id);
+window.addEventListener("error", function(event) {
+  showError(event.message + "\\n" + event.filename + ":" + event.lineno);
+});
 
-    let order = [];
-    let idx = 0;
-    let misses = 0;
-    let attempts = 0;
-    let startMs = null;
-    let timer = null;
-    let student = "";
-    let locked = false;
+document.addEventListener("DOMContentLoaded", function() {
+  $("startBtn").addEventListener("click", startGame);
+  $("hardResetTop").addEventListener("click", hardReset);
+  $("hardResetBottom").addEventListener("click", hardReset);
 
-    function showError(message) {
-      $("errorBox").classList.remove("hide");
-      $("errorBox").textContent = message;
-    }
+  $("studentName").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") startGame();
+  });
 
-    window.addEventListener("error", (event) => {
-      showError("Game error: " + event.message);
+  loadSavedAttempt();
+});
+
+function showError(message) {
+  const box = $("errorBox");
+  box.style.display = "block";
+  box.textContent = "Error caught:\\n" + message;
+}
+
+function saveState() {
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+    studentName: state.studentName,
+    index: state.index,
+    misses: state.misses,
+    missedIds: state.missedIds,
+    startedAt: state.startedAt
+  }));
+}
+
+function loadSavedAttempt() {
+  const raw = sessionStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+
+  try {
+    const saved = JSON.parse(raw);
+    if (!saved || !saved.studentName) return;
+
+    state.studentName = saved.studentName;
+    state.index = saved.index || 0;
+    state.misses = saved.misses || 0;
+    state.missedIds = saved.missedIds || [];
+    state.startedAt = saved.startedAt || new Date().toISOString();
+
+    showScreen("gameScreen");
+    startTimer();
+    renderQuestion();
+  } catch (error) {
+    showError(error.message);
+  }
+}
+
+function startGame() {
+  const name = $("studentName").value.trim();
+
+  if (!name) {
+    alert("Enter your first and last name before starting.");
+    return;
+  }
+
+  state.studentName = name;
+  state.index = 0;
+  state.misses = 0;
+  state.missedIds = [];
+  state.startedAt = new Date().toISOString();
+  state.endedAt = null;
+
+  saveState();
+  showScreen("gameScreen");
+  startTimer();
+  renderQuestion();
+}
+
+function showScreen(screenId) {
+  document.querySelectorAll(".screen").forEach(function(screen) {
+    screen.classList.remove("active");
+  });
+  $(screenId).classList.add("active");
+}
+
+function startTimer() {
+  if (state.timerId) clearInterval(state.timerId);
+
+  state.timerId = setInterval(function() {
+    const elapsed = elapsedSeconds();
+    $("timerText").textContent = formatSeconds(elapsed);
+  }, 1000);
+}
+
+function elapsedSeconds() {
+  if (!state.startedAt) return 0;
+  return Math.max(0, Math.floor((Date.now() - new Date(state.startedAt).getTime()) / 1000));
+}
+
+function formatSeconds(totalSeconds) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return minutes + ":" + String(seconds).padStart(2, "0");
+}
+
+function formatClock(isoString) {
+  return new Date(isoString).toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit"
+  });
+}
+
+function formatDate(isoString) {
+  return new Date(isoString).toLocaleDateString();
+}
+
+function currentAccuracy() {
+  const uniqueMisses = new Set(state.missedIds).size;
+  const correctFirstTry = Math.max(0, QUESTIONS.length - uniqueMisses);
+  return Math.round((correctFirstTry / QUESTIONS.length) * 100);
+}
+
+function renderHud() {
+  $("progressText").textContent = Math.min(state.index + 1, QUESTIONS.length) + " / " + QUESTIONS.length;
+  $("accuracyText").textContent = currentAccuracy() + "%";
+  $("missesText").textContent = state.misses;
+  $("timerText").textContent = formatSeconds(elapsedSeconds());
+}
+
+function renderQuestion() {
+  if (state.index >= QUESTIONS.length) {
+    finishGame();
+    return;
+  }
+
+  renderHud();
+
+  const q = QUESTIONS[state.index];
+  $("questionMeta").textContent = q.id + " • " + q.cs;
+  $("questionText").textContent = q.question;
+  $("feedback").className = "feedback";
+  $("feedback").textContent = "Select the best answer. The game auto-submits on click.";
+
+  const choices = $("choices");
+  choices.innerHTML = "";
+
+  q.choices.forEach(function(choiceText) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "choice";
+    button.textContent = choiceText;
+    button.addEventListener("click", function() {
+      submitChoice(button, choiceText);
+    });
+    choices.appendChild(button);
+  });
+}
+
+function submitChoice(button, choiceText) {
+  const q = QUESTIONS[state.index];
+  const allChoices = Array.from(document.querySelectorAll(".choice"));
+
+  if (choiceText === q.answer) {
+    button.classList.add("correct");
+    allChoices.forEach(function(choice) {
+      choice.disabled = true;
     });
 
-    window.addEventListener("unhandledrejection", (event) => {
-      const reason = event.reason?.message || event.reason;
-      showError("Game promise error: " + reason);
-    });
+    $("feedback").className = "feedback good";
+    $("feedback").innerHTML = "<strong>Correct.</strong><br>" + q.explanation;
 
-    function pad(number) {
-      return String(number).padStart(2, "0");
+    setTimeout(function() {
+      state.index += 1;
+      saveState();
+      renderQuestion();
+    }, 5000);
+
+  } else {
+    button.classList.add("incorrect");
+    button.disabled = true;
+
+    state.misses += 1;
+    if (!state.missedIds.includes(q.id)) {
+      state.missedIds.push(q.id);
     }
 
-    function timeStr(date) {
-      return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-    }
+    saveState();
+    renderHud();
 
-    function elapsed() {
-      const seconds = Math.floor((Date.now() - startMs) / 1000);
-      return `${Math.floor(seconds / 60)}:${pad(seconds % 60)}`;
-    }
+    $("feedback").className = "feedback warn";
+    $("feedback").innerHTML = "<strong>Hint:</strong> " + q.hint + "<br><br>Choose again. Correct answer required to advance.";
+  }
+}
 
-    function accuracy() {
-      if (!attempts) return 100;
-      return Math.round(((attempts - misses) / attempts) * 100);
-    }
+function finishGame() {
+  if (state.timerId) clearInterval(state.timerId);
 
-    function hardReset() {
-      try {
-        sessionStorage.removeItem(GAME.key);
-        localStorage.removeItem(GAME.key);
-      } catch (error) {
-        console.warn("Storage clear skipped:", error);
-      }
+  state.endedAt = new Date().toISOString();
 
-      location.reload();
-    }
+  showScreen("finishScreen");
 
-    function startGame() {
-      student = $("studentName").value.trim();
+  const elapsed = formatSeconds(Math.floor((new Date(state.endedAt).getTime() - new Date(state.startedAt).getTime()) / 1000));
+  const accuracy = currentAccuracy();
 
-      if (!student) {
-        showError("Enter your name to begin.");
-        return;
-      }
+  $("finishSummary").textContent = "Name: " + state.studentName + " • Accuracy: " + accuracy + "% • Misses: " + state.misses + " • Runtime: " + elapsed;
 
-      $("startPanel").classList.add("hide");
-      $("gamePanel").classList.remove("hide");
+  const ticketArea = $("ticketArea");
+  ticketArea.innerHTML = "";
 
-      startMs = Date.now();
-      order = GAME.questions.map((_, index) => index);
-      idx = 0;
-      misses = 0;
-      attempts = 0;
+  if (state.misses === 0) {
+    $("finishTitle").textContent = "Perfect Run Complete";
 
-      timer = setInterval(updateHud, 500);
-
-      render();
-    }
-
-    function updateHud() {
-      $("progress").textContent = `${Math.min(idx + 1, GAME.questions.length)} / ${GAME.questions.length}`;
-      $("acc").textContent = accuracy() + "%";
-      $("misses").textContent = misses;
-      $("timer").textContent = startMs ? elapsed() : "0:00";
-    }
-
-    function render() {
-      locked = false;
-      updateHud();
-
-      const question = GAME.questions[order[idx]];
-
-      $("qText").textContent = question.question;
-      $("csLine").textContent = question.cs + " • " + question.efl;
-      $("feedback").innerHTML =
-        "Choose the best answer. Incorrect choices give a hint but do not reveal the answer.";
-
-      const choicesBox = $("choices");
-      choicesBox.innerHTML = "";
-
-      const letters = ["A", "B", "C", "D"];
-
-      question.choices.forEach((choiceText, index) => {
-        const button = document.createElement("button");
-        button.className = "choice";
-        button.innerHTML = `<b>${letters[index]}.</b> ${choiceText}`;
-        button.onclick = () => choose(index, button);
-        choicesBox.appendChild(button);
-      });
-    }
-
-    function choose(index, button) {
-      if (locked) return;
-
-      const question = GAME.questions[order[idx]];
-      const chosen = "ABCD"[index];
-
-      attempts++;
-
-      if (chosen === question.answer) {
-        locked = true;
-        button.classList.add("correct");
-
-        $("feedback").innerHTML = "<b>Correct.</b><br>" + question.explanation;
-
-        updateHud();
-
-        setTimeout(() => {
-          idx++;
-
-          if (idx >= GAME.questions.length) {
-            finish();
-          } else {
-            render();
-          }
-        }, 5000);
-
-      } else {
-        misses++;
-        button.classList.add("incorrect");
-        button.disabled = true;
-
-        $("feedback").innerHTML = "<b>Not yet.</b> Hint: " + question.hint;
-
-        updateHud();
-      }
-    }
-
-    function finish() {
-      clearInterval(timer);
-
-      $("gamePanel").classList.add("hide");
-      $("finishPanel").classList.remove("hide");
-
-      const end = new Date();
-      const perfectRun = misses === 0;
-
-      $("finishTitle").textContent = perfectRun
-        ? "Perfect Run — Submit Ticket"
-        : "Mastery required — restart";
-
-      $("finishMsg").textContent = perfectRun
-        ? "Show this ticket to your teacher."
-        : "No ticket generated. Restart and complete a perfect run.";
-
-      const ticket = $("ticket");
-      ticket.className = perfectRun ? "ticket" : "ticket danger";
-
-      if (perfectRun) {
-        ticket.innerHTML = `
-          <h2>Submit Ticket</h2>
-
-          <div class="ticket-grid">
-            <div>
-              <span class="label">Student</span>
-              <b>${student}</b>
-            </div>
-
-            <div>
-              <span class="label">Date</span>
-              <b>${end.toLocaleDateString()}</b>
-            </div>
-
-            <div>
-              <span class="label">Start Time</span>
-              <b>${timeStr(new Date(startMs))}</b>
-            </div>
-
-            <div>
-              <span class="label">End Time</span>
-              <b>${timeStr(end)}</b>
-            </div>
-
-            <div>
-              <span class="label">Runtime</span>
-              <b>${elapsed()}</b>
-            </div>
-
-            <div>
-              <span class="label">Accuracy</span>
-              <b>${accuracy()}%</b>
-            </div>
-
-            <div>
-              <span class="label">Misses</span>
-              <b>${misses}</b>
-            </div>
-
-            <div>
-              <span class="label">Result</span>
-              <b>Perfect Run</b>
-            </div>
+    ticketArea.innerHTML = `
+      <div class="ticket">
+        <h3>Submit Ticket — Perfect Run</h3>
+        <div class="ticket-grid">
+          <div class="ticket-item">
+            <div class="ticket-label">Student Name</div>
+            <div class="ticket-value">${escapeHtml(state.studentName)}</div>
           </div>
-        `;
-      } else {
-        ticket.innerHTML = `
-          <h2>Mastery required — restart</h2>
-          <p>You must finish with 0 misses to generate a submit ticket.</p>
-        `;
-      }
-    }
+          <div class="ticket-item">
+            <div class="ticket-label">Date</div>
+            <div class="ticket-value">${formatDate(state.endedAt)}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Start Time</div>
+            <div class="ticket-value">${formatClock(state.startedAt)}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">End Time</div>
+            <div class="ticket-value">${formatClock(state.endedAt)}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Runtime</div>
+            <div class="ticket-value">${elapsed}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Accuracy</div>
+            <div class="ticket-value">${accuracy}%</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Misses</div>
+            <div class="ticket-value">${state.misses}</div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-label">Result</div>
+            <div class="ticket-value">Perfect Run</div>
+          </div>
+        </div>
+      </div>
+    `;
+  } else {
+    $("finishTitle").textContent = "Mastery Required";
+    ticketArea.innerHTML = `
+      <div class="mastery-message">
+        Mastery required — restart
+      </div>
+    `;
+  }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      $("gameTitle").textContent = GAME.title;
-      $("gameSub").textContent = GAME.subtitle;
-      $("gameMeta").textContent = GAME.cs + " • 9 Questions • Perfect Run Required";
+  sessionStorage.removeItem(STORAGE_KEY);
+}
 
-      $("startBtn").onclick = startGame;
-      $("resetBtn").onclick = hardReset;
-      $("resetBtn2").onclick = hardReset;
-    });
-  </script>
+function hardReset() {
+  sessionStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+</script>
 </body>
 </html>
